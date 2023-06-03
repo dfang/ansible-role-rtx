@@ -1,0 +1,95 @@
+---
+- name: Install plugin dependencies with apt
+  ansible.builtin.apt:
+    name: "{{ rtx_apt_optional_dependencies }}"
+    install_recommends: false
+    cache_valid_time: "{{ apt_cache_valid_time }}"
+  retries: "{{ remote_package_retries }}"
+  register: apt_result
+  until: apt_result is succeeded
+  become: true
+  when: ansible_os_family == "Debian"
+
+- name: Install plugin dependencies with yum
+  ansible.builtin.yum:
+    name: "{{ rtx_yum_optional_dependencies }}"
+  retries: "{{ remote_package_retries }}"
+  register: yum_result
+  until: yum_result is succeeded
+  become: true
+  when: ansible_os_family == "RedHat"
+
+- name: Install plugins
+  ansible.builtin.command: bash -lc 'source /etc/profile.d/rtx.sh && rtx plugins add {{ item.name }} {{ item.repository | default() }}'
+  args:
+    creates: "{{ rtx_dir }}/plugins/{{ item.name }}"
+  with_items: "{{ rtx_plugins }}"
+  when: rtx_plugins | length > 0
+  become: true
+  become_user: "{{ rtx_user }}"
+  # ignore_errors: true
+
+- name: Nodejs specific tasks
+  ansible.builtin.include_tasks: plugins/nodejs.yml
+  when: '"nodejs" in item["name"]'
+  with_items: "{{ rtx_plugins }}"
+
+- name: Erlang specific tasks
+  ansible.builtin.include_tasks: plugins/erlang.yml
+  when: '"erlang" in item["name"]'
+  with_items: "{{ rtx_plugins }}"
+
+- name: Ruby specific tasks
+  ansible.builtin.include_tasks: plugins/ruby.yml
+  when: '"ruby" in item["name"]'
+  with_items: "{{ rtx_plugins }}"
+
+- name: Python specific tasks
+  ansible.builtin.include_tasks: plugins/python.yml
+  when: '"python" in item["name"]'
+  with_items: "{{ rtx_plugins }}"
+
+- name: Install apps
+  ansible.builtin.command: bash -lc 'source /etc/profile.d/rtx.sh && rtx install {{ item.0.name }} {{ item.1 }}'
+  args:
+    creates: "{{ rtx_dir }}/installs/{{ item.0.name }}/{{ item.1 }}"
+  with_subelements:
+    - "{{ rtx_plugins }}"
+    - versions
+    - flags:
+      skip_missing: true
+  when: rtx_plugins | length > 0
+  become: true
+  become_user: "{{ rtx_user }}"
+
+- name: Uninstall apps
+  ansible.builtin.command: bash -lc 'source /etc/profile.d/rtx.sh && rtx uninstall {{ item.0.name }} {{ item.1 }}'
+  args:
+    removes: "{{ rtx_dir }}/installs/{{ item.0.name }}/{{ item.1 }}"
+  with_subelements:
+    - "{{ rtx_plugins }}"
+    - delete_versions
+    - flags:
+      skip_missing: true
+  when: rtx_plugins | length > 0
+  become: true
+  become_user: "{{ rtx_user }}"
+
+- name: Set global app versions
+  ansible.builtin.command: bash -lc 'source /etc/profile.d/rtx.sh &&
+    rtx global {{ item.name }} {{ item.global | default(item.versions | difference(item.delete_versions|default([]))
+    | sort | first) }}'
+  when: item.versions is defined
+  with_items: "{{ rtx_plugins }}"
+  become: true
+  become_user: "{{ rtx_user }}"
+  changed_when: false
+
+- name: Set group permissions
+  become: true
+  ansible.builtin.file:
+    path: "{{ rtx_dir }}"
+    owner: "{{ rtx_user }}"
+    group: "{{ rtx_group }}"
+    state: directory
+    recurse: true

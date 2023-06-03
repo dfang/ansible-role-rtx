@@ -1,0 +1,40 @@
+---
+dependency:
+  name: galaxy
+driver:
+  name: docker
+platforms:
+  - name: centos8
+    image: quay.io/centos/centos:stream8
+    pre_build_image: true
+  - name: centos7
+    image: centos:centos7
+    pre_build_image: true
+  - name: ubuntu
+    image: pycontribs/ubuntu
+    pre_build_image: true
+  - name: debian
+    image: pycontribs/debian
+    pre_build_image: true
+
+  # - name: bionic
+  #   image: ubuntu:18.04
+  #   pre_build_image: true
+  # - name: focal
+  #   image: ubuntu:20.04
+  #   pre_build_image: true
+  # - name: jammy
+  #   image: ubuntu:22.04
+  #   pre_build_image: true
+  # - name: kinetic
+  #   image: ubuntu:22.10
+  #   pre_build_image: true
+provisioner:
+  name: ansible
+verifier:
+  name: ansible
+
+lint: |
+  set -e
+  yamllint .
+  ansible-lint

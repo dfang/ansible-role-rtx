@@ -1,0 +1,7 @@
+---
+- name: Converge
+  hosts: all
+  tasks:
+    - name: "Include dfang.rtx"
+      include_role:
+        name: "dfang.rtx"

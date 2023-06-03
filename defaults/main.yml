@@ -1,0 +1,92 @@
+---
+# defaults file for rtx
+rtx_version: v1.30.4
+rtx_user: root
+rtx_group: root
+
+# rtx_plugins: []
+rtx_plugins:
+  - name: erlang
+    repository: ""
+    versions:
+      - 18.3
+      - 20.1
+    delete_versions: []
+    global: 20.1
+
+rtx_apt_global_dependencies:
+  - unzip
+  - git
+  - curl
+  - autoconf
+  - automake
+  - gcc
+  - g++
+  - make
+  - patch
+  - pkg-config
+  - binutils
+  - libtool
+  - bison
+  - libreadline-dev
+  - pcre-devel
+  - zlib-devel
+  - xz-devel
+rtx_yum_global_dependencies:
+  - unzip
+  - git
+  - curl
+  - autoconf
+  - automake
+  - gcc
+  - gcc-c++
+  - make
+  - patch
+  - pkgconfig
+  - binutils
+  - libtool
+  - bison
+  - readline-devel
+  - pcre-devel
+  - zlib-devel
+  - xz-devel
+rtx_apt_optional_dependencies: []
+rtx_yum_optional_dependencies: []
+rtx_apt_erlang_dependencies: [fop, gettext, xsltproc, libncurses5-dev, libssl-dev, libxslt-dev, libyaml-dev, zlib1g-dev]
+rtx_yum_erlang_dependencies: [fop, gettext, libxslt, ncurses-devel, openssl-devel, libxslt-devel, libyaml-devel, zlib-devel]
+rtx_apt_nodejs_dependencies: [gpg, dirmngr]
+rtx_yum_nodejs_dependencies: [gpg, perl-Digest-SHA]
+rtx_apt_php_dependencies:
+  - re2c
+  - gettext
+  - libxml2-dev
+  - libbz2-dev
+  - libcurl4-openssl-dev
+  - zlib1g-dev
+  - libicu-dev
+  - libjpeg-dev
+  - libpng-dev
+  - libwebp-dev
+  - libedit-dev
+  - libssl-dev
+  - libfreetype6-dev
+rtx_yum_php_dependencies:
+  - re2c
+  - gettext
+  - libxml2-devel
+  - bzip2-devel
+  - libcurl-devel
+  - zlib-devel
+  - libicu-devel
+  - libjpeg-devel
+  - libpng-devel
+  - libwebp-devel
+  - libedit-devel
+  - openssl-devel
+  - libfreetype6-devel
+rtx_apt_ruby_dependencies: [libssl-dev, libyaml-dev, zlib1g-dev, libncurses5-dev, libffi-dev]
+rtx_yum_ruby_dependencies: [openssl-devel, libyaml-devel, zlib-devel, ncurses-devel, libffi-devel, bzip2]
+# python-build-dependencies
+# https://github.com/pyenv/pyenv/wiki#suggested-build-environment
+rtx_apt_python_dependencies: [""]
+rtx_yum_python_dependencies: [""]

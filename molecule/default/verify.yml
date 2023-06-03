@@ -1,0 +1,26 @@
+---
+# This is an example playbook to execute Ansible tests.
+
+- name: Verify
+  hosts: all
+  gather_facts: false
+  tasks:
+    - name: Example assertion
+      ansible.builtin.assert:
+        that: 
+          - ansible_host is defined
+
+    - name: Populate service facts
+      ansible.builtin.service_facts:
+
+    - name: Print service facts
+      ansible.builtin.debug:
+        var: ansible_facts.services
+
+    - name: Populate rtx version
+      ansible.builtin.shell: rtx version
+      register: result
+
+    - name: Print rtx version
+      ansible.builtin.debug:
+        var: result.stdout

@@ -1,0 +1,16 @@
+
+[project]
+name = ""
+version = ""
+description = ""
+authors = [
+    {name = "dfang", email = "df1228@gmail.com"},
+]
+dependencies = [
+    "molecule>=5.0.1",
+    "molecule-plugins[docker]>=23.4.1",
+    "ansible-core>=2.15.0",
+    "selinux>=0.3.0",
+]
+requires-python = ">=3.10"
+license = {text = "MIT"}

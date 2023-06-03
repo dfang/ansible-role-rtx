@@ -1,0 +1,20 @@
+---
+- name: Install ruby dependencies with apt
+  ansible.builtin.apt:
+    name: "{{ rtx_apt_ruby_dependencies }}"
+    install_recommends: false
+    cache_valid_time: "{{ apt_cache_valid_time }}"
+  retries: "{{ remote_package_retries }}"
+  register: apt_ruby_result
+  until: apt_ruby_result is succeeded
+  become: true
+  when: ansible_os_family == "Debian"
+
+- name: Install ruby dependencies with yum
+  ansible.builtin.yum:
+    name: "{{ rtx_yum_ruby_dependencies }}"
+  retries: "{{ remote_package_retries }}"
+  register: yum_ruby_result
+  until: yum_ruby_result is succeeded
+  become: true
+  when: ansible_os_family == "RedHat"
