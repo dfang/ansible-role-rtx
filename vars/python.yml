@@ -1,0 +1,35 @@
+# python-build dependencies
+# https://github.com/pyenv/pyenv/wiki#suggested-build-environment
+
+
+# TODO: support Amazon Linux 2 and Fedora 22+ and openSUSE
+rtx_apt_python_dependencies:
+  - build-essential
+  - libssl-dev
+  - zlib1g-dev
+  - libbz2-dev
+  - libreadline-dev
+  - libsqlite3-dev
+  - curl
+  - libncursesw5-dev
+  - xz-utils
+  - tk-dev
+  - libxml2-dev
+  - libxmlsec1-dev
+  - libffi-dev
+  - liblzma-dev
+
+rtx_yum_python_dependencies: 
+  - gcc
+  - make
+  - patch
+  - zlib-devel
+  - bzip2
+  - bzip2-devel
+  - readline-devel
+  - sqlite
+  - sqlite-devel
+  - openssl-devel
+  - tk-devel
+  - libffi-devel
+  - xz-devel

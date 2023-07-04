@@ -1,0 +1,32 @@
+# python-build dependencies
+# https://github.com/rbenv/ruby-build/wiki#suggested-build-environment
+
+# TODO: Add Fedora and openSUSE support
+rtx_apt_ruby_dependencies:
+  - build-essential
+  - autoconf
+  - patch
+  - rustc
+  - libssl-dev
+  - libyaml-dev
+  - libreadline6-dev
+  - zlib1g-dev
+  - libgmp-dev
+  - libncurses5-dev
+  - libffi-dev
+  - libgdbm6
+  - libgdbm-dev
+  - libdb-dev
+  - uuid-dev
+
+rtx_yum_ruby_dependencies: 
+  - gcc-6
+  - patch
+  - bzip2
+  - openssl-devel
+  - libyaml-devel
+  - libffi-devel
+  - readline-devel
+  - zlib-devel
+  - gdbm-devel
+  - ncurses-devel

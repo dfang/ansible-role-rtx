@@ -1,7 +1,9 @@
 ---
-- name: Install plugin dependencies with apt
+
+#  Install global plugin dependencies
+- name: Install global dependencies with apt
   ansible.builtin.apt:
-    name: "{{ rtx_apt_optional_dependencies }}"
+    name: "{{ rtx_apt_global_dependencies }}"
     install_recommends: false
     cache_valid_time: "{{ apt_cache_valid_time }}"
   retries: "{{ remote_package_retries }}"
@@ -10,17 +12,19 @@
   become: true
   when: ansible_os_family == "Debian"
 
-- name: Install plugin dependencies with yum
+- name: Install global dependencies with yum
   ansible.builtin.yum:
-    name: "{{ rtx_yum_optional_dependencies }}"
+    name: "{{ rtx_yum_global_dependencies }}"
   retries: "{{ remote_package_retries }}"
   register: yum_result
   until: yum_result is succeeded
   become: true
   when: ansible_os_family == "RedHat"
 
+
+# Install rtx plugins
 - name: Install plugins
-  ansible.builtin.command: bash -lc 'source /etc/profile.d/rtx.sh && rtx plugins add {{ item.name }} {{ item.repository | default() }}'
+  ansible.builtin.command: bash -lc 'rtx plugins add {{ item.name }} {{ item.repository | default() }}'
   args:
     creates: "{{ rtx_dir }}/plugins/{{ item.name }}"
   with_items: "{{ rtx_plugins }}"
@@ -29,28 +33,55 @@
   become_user: "{{ rtx_user }}"
   # ignore_errors: true
 
-- name: Nodejs specific tasks
-  ansible.builtin.include_tasks: plugins/nodejs.yml
-  when: '"nodejs" in item["name"]'
-  with_items: "{{ rtx_plugins }}"
 
-- name: Erlang specific tasks
-  ansible.builtin.include_tasks: plugins/erlang.yml
-  when: '"erlang" in item["name"]'
-  with_items: "{{ rtx_plugins }}"
+- name: "{{item}} specific tasks"
+  ansible.builtin.include_tasks: "plugins/{{item}}.yml"
+  loop:
+    - nodejs
+    - python
+    - golang
+    - ruby
+    - erlang
+    - ruby
+    - php
+  ignore_errors: yes
 
-- name: Ruby specific tasks
-  ansible.builtin.include_tasks: plugins/ruby.yml
-  when: '"ruby" in item["name"]'
-  with_items: "{{ rtx_plugins }}"
+# # Install plugin dependencies for build environment
+# - name: Nodejs specific tasks
+#   ansible.builtin.include_tasks: plugins/nodejs.yml
+#   when: '"nodejs" in item["name"]'
+#   with_items: "{{ rtx_plugins }}"
 
-- name: Python specific tasks
-  ansible.builtin.include_tasks: plugins/python.yml
-  when: '"python" in item["name"]'
-  with_items: "{{ rtx_plugins }}"
+# - name: Erlang specific tasks
+#   ansible.builtin.include_tasks: plugins/erlang.yml
+#   when: '"erlang" in item["name"]'
+#   with_items: "{{ rtx_plugins }}"
+
+# - name: Ruby specific tasks
+#   ansible.builtin.include_tasks: plugins/ruby.yml
+#   when: '"ruby" in item["name"]'
+#   with_items: "{{ rtx_plugins }}"
+
+# - name: Python specific tasks
+#   ansible.builtin.include_tasks: plugins/python.yml
+#   when: '"python" in item["name"]'
+#   with_items: "{{ rtx_plugins }}"
+
+# - name: Elixir specific tasks
+#   ansible.builtin.include_tasks: plugins/elixir.yml
+#   when: '"elixir" in item["name"]'
+#   with_items: "{{ rtx_plugins }}"
+
+# - name: Php specific tasks
+#   ansible.builtin.include_tasks: plugins/php.yml
+#   when: '"php" in item["name"]'
+#   with_items: "{{ rtx_plugins }}"
+
+
+
 
 - name: Install apps
-  ansible.builtin.command: bash -lc 'source /etc/profile.d/rtx.sh && rtx install {{ item.0.name }} {{ item.1 }}'
+  ansible.builtin.command: bash -lc 'rtx install {{ item.0.name }} {{ item.1 }}'
   args:
     creates: "{{ rtx_dir }}/installs/{{ item.0.name }}/{{ item.1 }}"
   with_subelements:
@@ -63,7 +94,7 @@
   become_user: "{{ rtx_user }}"
 
 - name: Uninstall apps
-  ansible.builtin.command: bash -lc 'source /etc/profile.d/rtx.sh && rtx uninstall {{ item.0.name }} {{ item.1 }}'
+  ansible.builtin.command: bash -lc 'rtx uninstall {{ item.0.name }} {{ item.1 }}'
   args:
     removes: "{{ rtx_dir }}/installs/{{ item.0.name }}/{{ item.1 }}"
   with_subelements:
@@ -75,10 +106,11 @@
   become: true
   become_user: "{{ rtx_user }}"
 
+
+
+
 - name: Set global app versions
-  ansible.builtin.command: bash -lc 'source /etc/profile.d/rtx.sh &&
-    rtx global {{ item.name }} {{ item.global | default(item.versions | difference(item.delete_versions|default([]))
-    | sort | first) }}'
+  ansible.builtin.command: bash -lc 'rtx global {{ item.name }}@{{ item.global | default(item.versions | difference(item.delete_versions|default([])) | sort | first) }}'
   when: item.versions is defined
   with_items: "{{ rtx_plugins }}"
   become: true

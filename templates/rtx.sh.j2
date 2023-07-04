@@ -1,5 +1,7 @@
 # {{ ansible_managed }}
 
 if [ -f "/usr/local/bin/rtx" ]; then
+  export RTX_DATA_DIR=/opt/rtx
   eval "$(rtx activate bash)"
 fi
+

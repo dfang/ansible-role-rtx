@@ -1,0 +1,16 @@
+# https://github.com/asdf-vm/asdf-erlang#before-asdf-install
+
+rtx_apt_erlang_dependencies:
+  - build-essential
+  - autoconf
+  - m4
+  - libncurses5-dev
+  - libgl1-mesa-dev
+  - libglu1-mesa-dev
+  - libpng-dev
+  - libssh-dev
+  - unixodbc-dev
+  - xsltproc
+  - fop
+
+rtx_yum_erlang_dependencies: []

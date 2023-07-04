@@ -1,0 +1,29 @@
+rtx_apt_php_dependencies:
+  - re2c
+  - gettext
+  - libxml2-dev
+  - libbz2-dev
+  - libcurl4-openssl-dev
+  - zlib1g-dev
+  - libicu-dev
+  - libjpeg-dev
+  - libpng-dev
+  - libwebp-dev
+  - libedit-dev
+  - libssl-dev
+  - libfreetype6-dev
+rtx_yum_php_dependencies:
+  - re2c
+  - gettext
+  - libxml2-devel
+  - bzip2-devel
+  - libcurl-devel
+  - zlib-devel
+  - libicu-devel
+  - libjpeg-devel
+  - libpng-devel
+  - libwebp-devel
+  - libedit-devel
+  - openssl-devel
+  - libfreetype6-devel
+  

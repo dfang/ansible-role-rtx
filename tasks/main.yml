@@ -3,7 +3,22 @@
 
 - name: Install rtx
   ansible.builtin.import_tasks: install.yml
-- name: Include os-specific vars
-  ansible.builtin.include_vars: "{{ ansible_os_family }}.yml"
+
+# - name: Include os-specific vars
+#   ansible.builtin.include_vars: "{{ ansible_os_family }}.yml"
+
+- name: Inlcude vars for plugins dependencies
+  ansible.builtin.include_vars: "{{item}}.yml"
+  become: true
+  loop:
+    - nodejs
+    - python
+    - golang
+    - ruby
+    - erlang
+    - ruby
+    - php
+  ignore_errors: yes
+
 - name: Install plugins
   ansible.builtin.import_tasks: plugins.yml

@@ -1,0 +1,20 @@
+---
+- name: Install php dependencies with apt
+  ansible.builtin.apt:
+    name: "{{ rtx_apt_php_dependencies }}"
+    install_recommends: false
+    cache_valid_time: "{{ apt_cache_valid_time }}"
+  retries: "{{ remote_package_retries }}"
+  register: apt_php_result
+  until: apt_php_result is succeeded
+  become: true
+  when: ansible_os_family == "Debian"
+
+- name: Install php dependencies with yum
+  ansible.builtin.yum:
+    name: "{{ rtx_yum_php_dependencies }}"
+  retries: "{{ remote_package_retries }}"
+  register: yum_php_result
+  until: yum_php_result is succeeded
+  become: true
+  when: ansible_os_family == "RedHat"
