@@ -1,7 +1,7 @@
 ansible-role-rtx
 =========
 
-A role for install [rtx](https://github.com/jdxcode/rtx) on Linux servers.
+A role for install [rtx](https://github.com/jdxcode/rtx) on Linux servers.  [中文说明](https://github.com/dfang/ansible-role-rtx/blob/main/README-zh_CN.md)
 
 How to Install
 ------------
@@ -26,13 +26,13 @@ rtx_user: ubuntu
 rtx_plugins:  see example playbook
 ```
 
-1. only support bash shell
+1. only support bash shell  
 
-2. the rtx binary will always install to `/usr/local/bin/rtx`
+2. the rtx binary will always install to `/usr/local/bin/rtx`  
 
-3. if `system_wide: true`, RTX_DATA_DIR will be set to `/opt/rtx/`
-   if `system_wide: false`, RTX_DATA_DIR will be set to  `~/.local/share/rtx`
-   the default is true.
+3. if `system_wide: true`, `RTX_DATA_DIR` will be set to `/opt/rtx/`  
+   if `system_wide: false`, `RTX_DATA_DIR` will be set to  `~/.local/share/rtx`  
+   the default is `true`. 
 
 4. if `system_wide: true`, `/etc/profile.d/rtx.sh` with below content will be created
     ```
@@ -51,8 +51,6 @@ rtx_plugins:  see example playbook
     eval "$(rtx activate bash)"
     ```
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
-
 Dependencies
 ------------
 
@@ -62,14 +60,16 @@ None
 Example Playbook
 ----------------
 
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
+for example: 
+
+for erlang this will install 26.0.2 and set it to global version. for nodejs, this will install versions `6.14.0`, `20.0.0` and set `20.0.0` to global version  
 
 ```
     - hosts: servers
       become: yes
       gather_facts: yes
       roles:
-        - role: "ansible-role-rtx"
+        - role: "ansible-role-rtx" # or dfang.rtx
       vars:
         system_wide: false
         rtx_user: ubuntu
@@ -122,6 +122,16 @@ Including an example of how to use your role (for instance, with variables passe
           #   global: "3.8.6"
 
 ```
+
+Check compatibility between elixir and erlang:  
+
+https://hexdocs.pm/elixir/compatibility-and-deprecations.html#compatibility-between-elixir-and-erlang-otp
+
+
+TODO
+-------
+
+more test with molecule and update meta/main.yml
 
 License
 -------
