@@ -14,9 +14,10 @@ jobs:
           - os: "nmusatti/centos-stream8-pys"
             tag: "latest"
     steps:
-      - uses: actions/checkout@v2
-        with:
-          path: "${{ github.repository }}"
+      # - uses: actions/checkout@v2
+      #   with:
+      #     path: "${{ github.repository }}"
+      - uses: actions/checkout@v3
       - name: Molecule
         uses: MonolithProjects/action-molecule@v1.4.1
         with:
