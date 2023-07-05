@@ -1,26 +1,62 @@
-on: push
+# on: push
+
+# jobs:
+#   molecule:
+#     runs-on: ubuntu-latest
+#     strategy:
+#       fail-fast: false
+#       matrix:
+#         config:
+#           - os: "centos8"
+#             tag: "latest"
+#           - os: "nmusatti/ubuntu2204-pys"
+#             tag: "latest"
+#           - os: "nmusatti/centos-stream8-pys"
+#             tag: "latest"
+#     steps:
+#       # - uses: actions/checkout@v2
+#       #   with:
+#       #     path: "${{ github.repository }}"
+#       - uses: actions/checkout@v3
+#       - name: Molecule
+#         uses: MonolithProjects/action-molecule@v1.4.1
+#         with:
+#           os: ${{ matrix.config.os }}
+#           tag: ${{ matrix.config.tag }}
+#           molecule_command: converge
+---
+name: CI
+
+on:
+  - push
 
 jobs:
-  molecule:
-    runs-on: ubuntu-latest
+  # lint:
+  #   runs-on: ubuntu-20.04
+  #   steps:
+  #     - name: checkout
+  #       uses: actions/checkout@v3
+  #       with:
+  #         path: "${{ github.repository }}"
+  #     - name: molecule
+  #       uses: robertdebock/molecule-action@5.0.3
+  #       with:
+  #         command: lint
+  test:
+    # needs:
+    #   - lint
+    runs-on: ubuntu-20.04
     strategy:
-      fail-fast: false
       matrix:
-        config:
-          - os: "centos8"
-            tag: "latest"
-          - os: "nmusatti/ubuntu2204-pys"
-            tag: "latest"
-          - os: "nmusatti/centos-stream8-pys"
-            tag: "latest"
+        image:
+          - nmusatti/ubuntu2204-pys
     steps:
-      # - uses: actions/checkout@v2
-      #   with:
-      #     path: "${{ github.repository }}"
-      - uses: actions/checkout@v3
-      - name: Molecule
-        uses: MonolithProjects/action-molecule@v1.4.1
+      - name: checkout
+        uses: actions/checkout@v3
         with:
-          os: ${{ matrix.config.os }}
-          tag: ${{ matrix.config.tag }}
-          molecule_command: converge
+          path: "${{ github.repository }}"
+      - name: molecule
+        uses: robertdebock/molecule-action@5.0.3
+        with:
+          image: "${{ matrix.image }}"
+          options: parallel
