@@ -1,0 +1,24 @@
+on: push
+
+jobs:
+  molecule:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        config:
+          - os: "centos8"
+            tag: "latest"
+          - os: "nmusatti/ubuntu2204-pys"
+            tag: "latest"
+          - os: "nmusatti/centos-stream8-pys"
+            tag: "latest"
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          path: "${{ github.repository }}"
+      - name: Molecule
+        uses: MonolithProjects/action-molecule@v1.4.1
+        with:
+          os: ${{ matrix.config.os }}
+          tag: ${{ matrix.config.tag }}
