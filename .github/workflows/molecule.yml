@@ -22,3 +22,4 @@ jobs:
         with:
           os: ${{ matrix.config.os }}
           tag: ${{ matrix.config.tag }}
+          molecule_command: converge
