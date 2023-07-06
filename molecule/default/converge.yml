@@ -1,7 +1,17 @@
 ---
 - name: Converge
   hosts: all
-  tasks:
-    - name: "Include dfang.rtx"
-      include_role:
-        name: "dfang.rtx"
+  roles:
+    # - name: "Include dfang.rtx"
+      # ansible.builtin.include_role:
+      #   name: "ansible-role-rtx"
+      #   rtx_plugins:
+      #     - name: "nodejs"
+      #       versions: ["16.14.0"]
+      #       global: "16.14.0"
+
+    - role: ansible-role-rtx
+      rtx_plugins:
+        - name: "nodejs"
+          versions: ["16.14.0"]
+          global: "16.14.0"

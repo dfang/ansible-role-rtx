@@ -44,10 +44,10 @@ rtx_apt_global_dependencies:
   - unzip
   - git
   - curl
-  - binutils
-  - libtool
-  - bison
-  - libreadline-dev
+  # - binutils
+  # - libtool
+  # - bison
+  # - libreadline-dev
   # - pcre-devel
   # - zlib-devel
   # - xz-devel

@@ -5,22 +5,30 @@
   hosts: all
   gather_facts: false
   tasks:
-    - name: Example assertion
-      ansible.builtin.assert:
-        that: 
-          - ansible_host is defined
+    # - name: Example assertion
+    #   ansible.builtin.assert:
+    #     that: 
+    #       - ansible_host is defined
 
-    - name: Populate service facts
-      ansible.builtin.service_facts:
+    # - name: Populate service facts
+    #   ansible.builtin.service_facts:
 
-    - name: Print service facts
-      ansible.builtin.debug:
-        var: ansible_facts.services
+    # - name: Print service facts
+    #   ansible.builtin.debug:
+    #     var: ansible_facts.services
 
     - name: Populate rtx version
       ansible.builtin.shell: rtx version
-      register: result
+      register: rtx_version
 
     - name: Print rtx version
       ansible.builtin.debug:
-        var: result.stdout
+        var: rtx_version.stdout
+
+    - name: Populate nodejs version
+      ansible.builtin.shell: nodejs version
+      register: nodejs_version
+
+    - name: Print nodejs version
+      ansible.builtin.debug:
+        var: nodejs_version.stdout

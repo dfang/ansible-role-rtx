@@ -7,9 +7,29 @@
 # - name: Include os-specific vars
 #   ansible.builtin.include_vars: "{{ ansible_os_family }}.yml"
 
+# - name: Inlcude vars for plugins dependencies
+#   ansible.builtin.include_vars: "{{item}}.yml"
+#   loop:
+#     - nodejs
+#     - python
+#     - golang
+#     - ruby
+#     - erlang
+#     - ruby
+#     - php
+#   ignore_errors: yes
+
+
+# - name: Include OS-specific variables.
+#   include_vars: "{{ item }}"
+#   with_first_found:
+#     - ../vars/{{ ansible_distribution | lower }}.yml
+#     - ../vars/{{ ansible_os_family | lower }}.yml
+
+
+# read vars from first file found, use 'vars/' relative subdir
 - name: Inlcude vars for plugins dependencies
-  ansible.builtin.include_vars: "{{item}}.yml"
-  become: true
+  ansible.builtin.include_vars: "{{lookup('ansible.builtin.first_found', params)}}"
   loop:
     - nodejs
     - python
@@ -18,7 +38,14 @@
     - erlang
     - ruby
     - php
-  ignore_errors: yes
+  vars:
+    params:
+      files:
+        - '{{ item }}-{{ ansible_distribution | lower }}-{{ ansible_distribution_major_version }}.yml'
+        - '{{ item }}-{{ ansible_distribution | lower }}.yml'
+        - '{{ item }}.yml'
+      paths:
+        - 'vars'
 
 - name: Install plugins
   ansible.builtin.import_tasks: plugins.yml

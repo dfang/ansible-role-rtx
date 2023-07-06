@@ -1,22 +1,26 @@
 ---
 dependency:
   name: galaxy
+
 driver:
   name: docker
-platforms:
-  - name: centos8
-    image: quay.io/centos/centos:stream8
-    pre_build_image: true
-  - name: centos7
-    image: centos:centos7
-    pre_build_image: true
-  - name: ubuntu
-    image: pycontribs/ubuntu
-    pre_build_image: true
-  - name: debian
-    image: pycontribs/debian
-    pre_build_image: true
 
+platforms:
+  # - name: centos-stream9-pys
+  #   image: nmusatti/centos-stream9-pys
+  #   pre_build_image: true
+  # - name: centos-stream8-pys
+  #   image: nmusatti/centos-stream8-pys
+  #   pre_build_image: true
+  # - name: centos7-pys
+  #   image: nmusatti/centos7-pys
+  #   pre_build_image: true
+  # - name: ubuntu
+  #   image: pycontribs/ubuntu
+  #   pre_build_image: true
+  # - name: debian
+  #   image: pycontribs/debian
+  #   pre_build_image: true
   # - name: bionic
   #   image: ubuntu:18.04
   #   pre_build_image: true
@@ -29,8 +33,30 @@ platforms:
   # - name: kinetic
   #   image: ubuntu:22.10
   #   pre_build_image: true
+  # - name: lunar
+  #   image: ubuntu:23.04
+  #   pre_build_image: true
+  # - name: rockylinux8-pys
+  #   image: nmusatti/rockylinux8-pys
+  #   pre_build_image: true
+  # - name: centos-stream8-pys
+  #   image: nmusatti/centos-stream8-pys
+  #   pre_build_image: true
+  # - name: fedora36-pys
+  #   image: nmusatti/fedora36-pys
+  #   pre_build_image: true
+  - name: ubuntu1804-pys
+    image: nmusatti/ubuntu1804-pys
+    pre_build_image: true
+  - name: ubuntu2004-pys
+    image: nmusatti/ubuntu2004-pys
+    pre_build_image: true
+  - name: ubuntu2204-pys
+    image: nmusatti/ubuntu2204-pys
+    pre_build_image: true
 provisioner:
   name: ansible
+
 verifier:
   name: ansible
 
