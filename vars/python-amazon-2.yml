@@ -1,0 +1,26 @@
+rtx_yum_python_dependencies: 
+  - gcc
+  - make
+  - patch
+  - zlib-devel
+  - bzip2
+  - bzip2-devel
+  - readline-devel
+  - sqlite
+  - sqlite-devel
+  # - openssl-devel
+  - openssl11
+  - openssl11-devel
+  - tk-devel
+  - libffi-devel
+  - xz-devel
+
+
+# ModuleNotFoundError: No module named '_ssl'
+# ERROR: The Python ssl extension was not compiled. Missing the OpenSSL lib?
+# Please consult to the Wiki page to fix the problem.
+# https://github.com/pyenv/pyenv/wiki/Common-build-problems
+
+# https://note.com/t_ak66/n/n57f2da3ac83c
+# $ sudo yum remove openssl-devel
+# $ sudo yum install -y openssl11 openssl11-devel

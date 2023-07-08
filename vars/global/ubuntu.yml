@@ -1,0 +1,16 @@
+rtx_global_dependencies:
+  - build-essential
+  # - autoconf (debian 10-11-12 no this)
+  # - automake (debian 10-11-12 no this)
+  - pkg-config
+  - patch
+  - unzip
+  - git
+  - curl
+  - binutils
+  - libtool
+  - bison
+  - libreadline-dev
+  # - pcre-devel
+  # - zlib-devel
+  # - xz-devel

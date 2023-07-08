@@ -14,3 +14,5 @@ rtx_yum_nodejs_dependencies:
 - python3-pip
 # - g++
 - make
+
+# centos 8 no g++

@@ -45,7 +45,7 @@ platforms:
   - name: amazonlinux2
     image: geerlingguy/docker-amazonlinux2-ansible
     pre_build_image: true
-  # - name: centos7
+  # - name: centos7 (GLIBC_2.18 not found which required by rtx)
   #   image: geerlingguy/docker-centos7-ansible
   #   pre_build_image: true
   - name: centos8

@@ -19,7 +19,7 @@ rtx_group: root
 # eval "$(rtx activate bash)"
 system_wide: true
 
-# by default, do not install any plugins and apps, you have to pass vars to role like this
+# by default, no plugins and apps installed, you have to pass vars to role like this
 # rtx_plugins:
 #   - name: erlang
 #     repository: ""
@@ -29,46 +29,46 @@ system_wide: true
 #     global: 20.1
 rtx_plugins: []
 
-# build-essential depends on
-# dpkg-dev
-# g++
-# gcc
-# libc6-dev
-# make
-rtx_apt_global_dependencies:
-  - build-essential
-  - autoconf
-  - automake
-  - pkg-config
-  - patch
-  - unzip
-  - git
-  - curl
-  # - binutils
-  # - libtool
-  # - bison
-  # - libreadline-dev
-  # - pcre-devel
-  # - zlib-devel
-  # - xz-devel
-rtx_yum_global_dependencies:
-  - autoconf
-  - automake
-  - gcc
-  - gcc-c++
-  - make
-  - unzip
-  - git
-  - curl
-  - patch
-  - pkgconfig
-  - binutils
-  - libtool
-  - bison
-  - readline-devel
-  # - pcre-devel
-  - zlib-devel
-  - xz-devel
+# # build-essential depends on
+# # dpkg-dev
+# # g++
+# # gcc
+# # libc6-dev
+# # make
+# rtx_apt_global_dependencies:
+#   - build-essential
+#   - autoconf
+#   - automake
+#   - pkg-config
+#   - patch
+#   - unzip
+#   - git
+#   - curl
+#   - binutils
+#   - libtool
+#   - bison
+#   - libreadline-dev
+#   # - pcre-devel
+#   # - zlib-devel
+#   # - xz-devel
+# rtx_yum_global_dependencies:
+#   - autoconf
+#   - automake
+#   - gcc
+#   - gcc-c++
+#   - make
+#   - unzip
+#   - git
+#   - curl
+#   - patch
+#   - pkgconfig
+#   - binutils
+#   - libtool
+#   - bison
+#   - readline-devel
+#   # - pcre-devel
+#   - zlib-devel
+#   - xz-devel
 
 apt_cache_valid_time: 86400
 remote_package_retries: 5

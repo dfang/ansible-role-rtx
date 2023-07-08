@@ -1,30 +1,8 @@
 ---
 
-#  Install global plugin dependencies
-- name: Install global dependencies with apt
-  ansible.builtin.apt:
-    name: "{{ rtx_apt_global_dependencies }}"
-    install_recommends: false
-    cache_valid_time: "{{ apt_cache_valid_time }}"
-  retries: "{{ remote_package_retries }}"
-  register: apt_result
-  until: apt_result is succeeded
-  become: true
-  when: ansible_os_family == "Debian"
-
-- name: Install global dependencies with yum
-  ansible.builtin.yum:
-    name: "{{ rtx_yum_global_dependencies }}"
-  retries: "{{ remote_package_retries }}"
-  register: yum_result
-  until: yum_result is succeeded
-  become: true
-  when: ansible_os_family == "RedHat"
-
-
 # Install rtx plugins
 - name: Install plugins
-  ansible.builtin.command: bash -lc 'rtx plugins add {{ item.name }} {{ item.repository | default() }}'
+  ansible.builtin.command: bash -lc '/usr/local/bin/rtx plugins add {{ item.name }} {{ item.repository | default() }}'
   args:
     creates: "{{ rtx_dir }}/plugins/{{ item.name }}"
   with_items: "{{ rtx_plugins }}"
@@ -32,7 +10,6 @@
   become: true
   become_user: "{{ rtx_user }}"
   # ignore_errors: true
-
 
 - name: "{{item}} specific tasks"
   ansible.builtin.include_tasks: "plugins/{{item}}.yml"
@@ -43,7 +20,9 @@
     - ruby
     - erlang
     - ruby
+    - java
     - php
+  when: 'item in plugins_to_install'
   ignore_errors: yes
 
 # # Install plugin dependencies for build environment
@@ -81,7 +60,7 @@
 
 
 - name: Install apps
-  ansible.builtin.command: bash -lc 'rtx install {{ item.0.name }} {{ item.1 }}'
+  ansible.builtin.command: bash -lc '/usr/local/bin/rtx install {{ item.0.name }}@{{ item.1 }}'
   args:
     creates: "{{ rtx_dir }}/installs/{{ item.0.name }}/{{ item.1 }}"
   with_subelements:
@@ -94,7 +73,7 @@
   become_user: "{{ rtx_user }}"
 
 - name: Uninstall apps
-  ansible.builtin.command: bash -lc 'rtx uninstall {{ item.0.name }} {{ item.1 }}'
+  ansible.builtin.command: bash -lc '/usr/local/bin/rtx uninstall {{ item.0.name }}@{{ item.1 }}'
   args:
     removes: "{{ rtx_dir }}/installs/{{ item.0.name }}/{{ item.1 }}"
   with_subelements:
@@ -110,7 +89,7 @@
 
 
 - name: Set global app versions
-  ansible.builtin.command: bash -lc 'rtx global {{ item.name }}@{{ item.global | default(item.versions | difference(item.delete_versions|default([])) | sort | first) }}'
+  ansible.builtin.command: bash -lc '/usr/local/bin/rtx global {{ item.name }}@{{ item.global | default(item.versions | difference(item.delete_versions|default([])) | sort | first) }}'
   when: item.versions is defined
   with_items: "{{ rtx_plugins }}"
   become: true

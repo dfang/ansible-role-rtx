@@ -2,8 +2,8 @@
 
 ## install python
 
-rtx install python 3.10.11
-rtx global python 3.10.11
+rtx install python 3.10.12
+rtx global python 3.10.12
 
 ## install poetry
 

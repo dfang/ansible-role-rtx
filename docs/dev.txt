@@ -1,0 +1,16 @@
+```
+cd ansible-role-rtx
+rtx install --install-missing
+pdm sync
+python -V
+pdm -V
+molecule list
+```
+
+test a scenario
+
+```
+molecule test
+molecule test -s nodejs
+molecule test -s python
+```

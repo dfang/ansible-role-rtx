@@ -1,0 +1,20 @@
+rtx_global_dependencies:
+  - "@Development tools"
+  - autoconf
+  - automake
+  - gcc
+  - gcc-c++
+  - make
+  - unzip
+  - git
+  # - curl
+  - curl-minimal
+  - patch
+  - pkgconfig
+  - binutils
+  - libtool
+  - bison
+  - readline-devel
+  # - pcre-devel
+  - zlib-devel
+  - xz-devel

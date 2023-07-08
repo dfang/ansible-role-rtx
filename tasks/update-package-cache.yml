@@ -1,0 +1,42 @@
+# - name: Gather the package facts
+#   ansible.builtin.package_facts:
+#     manager: auto
+
+# | ansible_distribution     | ansible_distribution | ansible_os_family | ansible_pkg_mgr |
+# | ------------------------ | -------------------- | ----------------- | --------------- |
+# | debian 10-12             | Debian               | Debian            | apt             |
+# | ubuntu 18.04 20.04 22.04 | Ubuntu               | Debian            | apt             |
+# | rockylinux 8 9           | Rocky                | RedHat            | dnf             |
+# | fedora34-38              | Fedora               | RedHat            | dnf             |
+# | centos8                  | CentOS               | RedHat            | dnf             |
+# | amazonlinux2             | Amazon               | RedHat            | yum             |
+
+- name: Update Package Cache (apt/Ubuntu/Debian)
+  tags: always
+  apt:
+    update_cache: yes
+  # changed_when: false
+  when: ansible_os_family == "Debian"
+
+- name: Update Package Cache (yum/CentOS)
+  tags: always
+  yum:
+    update_cache: yes
+  changed_when: false
+  when: ansible_os_family == "RedHat"
+
+# - name: Update Package Cache (dnf/CentOS8、dnf/Fedora、dnf/RockyLinux)
+#   tags: always
+#   dnf:
+#     update_cache: yes
+#   changed_when: false
+#   when: ansible_distribution == "CentOS"
+
+# - name: Update Package Cache (yum/Amazon)
+#   tags: always
+#   yum:
+#     update_cache: yes
+#   changed_when: false
+#   when: ansible_distribution == "Amazon"
+
+

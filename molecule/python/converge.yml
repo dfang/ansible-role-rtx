@@ -1,0 +1,13 @@
+---
+- name: Converge
+  hosts: all
+  tasks:
+    - name: "Include ansible-role-rtx"
+      ansible.builtin.include_role:
+        name: "ansible-role-rtx"
+      vars:
+        rtx_plugins:
+          - name: "python"
+            repository: "https://ghproxy.com/https://github.com/rtx-plugins/rtx-python"
+            versions: ["3.10.12"]
+            global: "3.10.12"

@@ -2,6 +2,6 @@
 
 if [ -f "/usr/local/bin/rtx" ]; then
   export RTX_DATA_DIR=/opt/rtx
-  eval "$(rtx activate bash)"
+  eval "$(/usr/local/bin/rtx activate bash)"
 fi
 

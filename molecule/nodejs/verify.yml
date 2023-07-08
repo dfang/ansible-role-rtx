@@ -1,0 +1,38 @@
+---
+- name: Verify
+  hosts: all
+  gather_facts: false
+  tasks:
+    # - name: Example assertion
+    #   ansible.builtin.assert:
+    #     that: 
+    #       - ansible_host is defined
+
+    # - name: Populate service facts
+    #   ansible.builtin.service_facts:
+
+    # - name: Print service facts
+    #   ansible.builtin.debug:
+    #     var: ansible_facts.services
+
+    # - name: Populate rtx version
+    #   ansible.builtin.shell: rtx version
+    #   register: rtx_version
+
+    # - name: Print rtx version
+    #   ansible.builtin.debug:
+    #     var: rtx_version.stdout
+
+    - name: Populate nodejs version
+      ansible.builtin.shell: /opt/rtx/installs/nodejs/16.14/bin/node --version
+      register: nodejs_version
+
+    - name: Print nodejs version
+      ansible.builtin.debug:
+        var: nodejs_version.stdout
+
+    - name: Assert nodejs version
+      ansible.builtin.assert:
+        that: "'v16.14.0' in nodejs_version.stdout"
+
+

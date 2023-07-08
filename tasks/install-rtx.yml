@@ -7,12 +7,12 @@
     dest: /usr/local/bin/rtx
     mode: "755"
 
-- name: Install system wide
-  ansible.builtin.import_tasks: install-system-wide.yml
+- name: Install rtx system wide
+  ansible.builtin.import_tasks: install-rtx-system-wide.yml
   when: system_wide is true
 
-- name: Install user wide
-  ansible.builtin.import_tasks: install-user-wide.yml
+- name: Install rtx user wide
+  ansible.builtin.import_tasks: install-rtx-user-wide.yml
   when: system_wide is false
 
 # # 

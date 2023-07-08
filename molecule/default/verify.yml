@@ -25,10 +25,6 @@
       ansible.builtin.debug:
         var: rtx_version.stdout
 
-    - name: Populate nodejs version
-      ansible.builtin.shell: nodejs version
-      register: nodejs_version
-
-    - name: Print nodejs version
-      ansible.builtin.debug:
-        var: nodejs_version.stdout
+    - name: Assert rtx version
+      ansible.builtin.assert:
+        that: "'1.30.4' in rtx_version.stdout"

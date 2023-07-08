@@ -1,0 +1,38 @@
+---
+- name: Verify
+  hosts: all
+  gather_facts: false
+  tasks:
+    # - name: Example assertion
+    #   ansible.builtin.assert:
+    #     that: 
+    #       - ansible_host is defined
+
+    # - name: Populate service facts
+    #   ansible.builtin.service_facts:
+
+    # - name: Print service facts
+    #   ansible.builtin.debug:
+    #     var: ansible_facts.services
+
+    # - name: Populate rtx version
+    #   ansible.builtin.shell: rtx version
+    #   register: rtx_version
+
+    # - name: Print rtx version
+    #   ansible.builtin.debug:
+    #     var: rtx_version.stdout
+
+    - name: Populate python version
+      ansible.builtin.shell: /opt/rtx/installs/python/3.10.12/bin/python -V
+      register: python_version
+
+    - name: Print python version
+      ansible.builtin.debug:
+        var: python_version.stdout
+
+    - name: Assert python version
+      ansible.builtin.assert:
+        that: "'3.10.12' in python_version.stdout"
+
+

@@ -72,9 +72,9 @@
 #   ansible.builtin.debug:
 #     var: user_home
 
-- name: Run rtx version
-  ansible.builtin.shell: rtx version
-  register: rtx_version_output
+# - name: Run rtx version
+#   ansible.builtin.shell: rtx version
+#   register: rtx_version_output
 
-- name: Output rtx version
-  debug: var=rtx_version_output.stdout_lines
+# - name: Output rtx version
+#   debug: var=rtx_version_output.stdout_lines
