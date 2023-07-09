@@ -112,4 +112,4 @@ verifier:
 lint: |
   set -e
   yamllint .
-  ansible-lint
+  ansible-lint --write=all --show-relpath

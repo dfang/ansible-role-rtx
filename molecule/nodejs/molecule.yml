@@ -91,7 +91,7 @@ provisioner:
 verifier:
   name: ansible
 
-lint: |
+lint: |-
   set -e
   yamllint .
-  ansible-lint
+  ansible-lint --write=all --show-relpath

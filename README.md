@@ -18,7 +18,7 @@ ansible-galaxy role install git+https://github.com/dfang/ansible-role-rtx
 ```
 
 
-Requirements
+Compatibilities
 --------------
 
 support these linux operating systems except centos7(because of GLIBC_2.18 required by rtx):  
@@ -39,6 +39,8 @@ support these linux operating systems except centos7(because of GLIBC_2.18 requi
 - ubuntu1804  
 - ubuntu2004  
 - ubuntu2204  
+- opensuse (TODO)
+- OracleLinux (TODO)
 
 Role Variables
 --------------

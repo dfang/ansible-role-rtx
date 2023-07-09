@@ -61,7 +61,7 @@
 #   #    executable: /bin/bash
 
 # - name: Run rtx version
-#   ansible.builtin.shell: rtx version
+#   ansible.builtin.command: rtx version
 #   register: rtx_version_output
 
 # - name: Output rtx version

@@ -8,6 +8,7 @@
 
 - name: Get user home directory
   ansible.builtin.shell: >
+    set -o pipefail
     getent passwd {{ rtx_user }}  | awk -F: '{ print $6 }'
   changed_when: false
   register: user_home
@@ -32,6 +33,7 @@
   ansible.builtin.shell: source {{ user_home.stdout }}/.bashrc && echo bashrc sourced
   args:
     executable: /bin/bash
+  changed_when: false
 
 # - name: Get users HOME
 #   ansible.builtin.getent:

@@ -16,7 +16,7 @@
     #     var: ansible_facts.services
 
     # - name: Populate rtx version
-    #   ansible.builtin.shell: rtx version
+    #   ansible.builtin.command: rtx version
     #   register: rtx_version
 
     # - name: Print rtx version
@@ -24,8 +24,9 @@
     #     var: rtx_version.stdout
 
     - name: Populate nodejs version
-      ansible.builtin.shell: /opt/rtx/installs/nodejs/16.14/bin/node --version
+      ansible.builtin.command: /opt/rtx/installs/nodejs/16.14/bin/node --version
       register: nodejs_version
+      changed_when: false
 
     - name: Print nodejs version
       ansible.builtin.debug:

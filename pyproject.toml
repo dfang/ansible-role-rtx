@@ -14,3 +14,20 @@ dependencies = [
 ]
 requires-python = ">=3.10"
 license = {text = "MIT"}
+
+[tool.pdm.dev-dependencies]
+dev = [
+    "ansible-lint>=6.16.2",
+    "yamllint>=1.32.0",
+]
+
+# https://github.com/pdm-project/pdm/issues/1575
+# https://pdm.fming.dev/latest/usage/config/#override-the-resolved-package-versions
+[tool.pdm.resolution.overrides]
+will-not-work-on-windows-try-from-wsl-instead = "0.1.0"
+
+# https://pdm.fming.dev/latest/usage/scripts/
+[tool.pdm.scripts]
+yamllint = "yamllint ."
+ansible-lint = "ansible-lint --write=all --show-relpath"
+lint = {composite = ["ansible-lint", "yamllint"]}

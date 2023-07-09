@@ -24,8 +24,9 @@
     #     var: rtx_version.stdout
 
     - name: Populate python version
-      ansible.builtin.shell: /opt/rtx/installs/python/3.10.12/bin/python -V
+      ansible.builtin.command: /opt/rtx/installs/python/3.10.12/bin/python -V
       register: python_version
+      changed_when: false
 
     - name: Print python version
       ansible.builtin.debug:

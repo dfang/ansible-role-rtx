@@ -1,8 +1,10 @@
 ---
 dependency:
   name: galaxy
+
 driver:
   name: docker
+
 platforms:
   # - name: centos8
   #   image: quay.io/centos/centos:stream8
@@ -87,10 +89,11 @@ platforms:
 
 provisioner:
   name: ansible
+
 verifier:
   name: ansible
 
 lint: |
   set -e
   yamllint .
-  ansible-lint
+  ansible-lint --write=all --show-relpath

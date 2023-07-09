@@ -19,7 +19,9 @@
 
     - name: Populate rtx version
       ansible.builtin.command: rtx version
-      register: rtx_version
+      register: rtx_version # <- Registers the command output.
+      changed_when: rtx_version.rc != 0 # <- Uses the return code to define when the task has changed.
+      # changed_when: false # or just make a task show as unchanged
 
     - name: Print rtx version
       ansible.builtin.debug:
