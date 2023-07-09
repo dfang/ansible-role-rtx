@@ -103,4 +103,4 @@ jobs:
           eval $(pdm venv activate)
           ansible --version
           molecule --version
-          molecule test --destroy=never --parallel --all
+          molecule test --parallel --all
