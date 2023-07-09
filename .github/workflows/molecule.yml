@@ -48,8 +48,11 @@ jobs:
     #   - lint
     runs-on: ubuntu-20.04
     strategy:
+      fail-fast: false
       matrix:
-        image:
+        scenario:
+          - default
+        distros:
           - nmusatti/ubuntu2204-pys
     steps:
       - name: checkout
@@ -57,7 +60,9 @@ jobs:
         with:
           path: "${{ github.repository }}"
       - name: molecule
-        uses: robertdebock/molecule-action@5.0.3
+        uses: robertdebock/molecule-action@4.0.9
         with:
-          image: "${{ matrix.image }}"
           options: parallel
+          image: "${{ matrix.distros }}"
+          scenario: ${{ matrix.scenario }}
+          command: "--debug test"
