@@ -65,4 +65,4 @@ jobs:
           options: parallel
           image: "${{ matrix.distros }}"
           scenario: ${{ matrix.scenario }}
-          command: "--debug test"
+          command: "test"
