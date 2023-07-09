@@ -1,3 +1,4 @@
+---
 rtx_apt_php_dependencies:
   - re2c
   - gettext
@@ -26,4 +27,3 @@ rtx_yum_php_dependencies:
   - libedit-devel
   - openssl-devel
   - libfreetype6-devel
-  

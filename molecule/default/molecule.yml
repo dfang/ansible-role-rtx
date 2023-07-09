@@ -1,8 +1,18 @@
 ---
+scenario:
+  name: default
+  # test_sequences:
+  #   - destroy
+  #   - create
+  #   - converge
+  #   - destroy
+
 dependency:
   name: galaxy
+
 driver:
   name: docker
+
 platforms:
   # - name: centos8
   #   image: quay.io/centos/centos:stream8
@@ -31,7 +41,7 @@ platforms:
   # - name: ubuntu-pys
   #   image: nmusatti/ubuntu-pys
   #   pre_build_image: true
- 
+
   - name: ubuntu1804-pys
     image: nmusatti/ubuntu1804-pys
     pre_build_image: true
@@ -41,7 +51,7 @@ platforms:
   - name: ubuntu2204-pys
     image: nmusatti/ubuntu2204-pys
     pre_build_image: true
- 
+
   - name: amazonlinux2
     image: geerlingguy/docker-amazonlinux2-ansible
     pre_build_image: true
@@ -51,7 +61,7 @@ platforms:
   - name: centos8
     image: geerlingguy/docker-centos8-ansible
     pre_build_image: true
-    
+
   - name: debian10
     image: geerlingguy/docker-debian10-ansible
     pre_build_image: true
@@ -61,7 +71,7 @@ platforms:
   - name: debian12
     image: geerlingguy/docker-debian12-ansible
     pre_build_image: true
-  
+
   - name: rockylinux8
     image: geerlingguy/docker-rockylinux8-ansible
     pre_build_image: true
@@ -87,6 +97,7 @@ platforms:
 
 provisioner:
   name: ansible
+
 verifier:
   name: ansible
 

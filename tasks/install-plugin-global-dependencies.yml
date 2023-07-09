@@ -1,16 +1,17 @@
+---
 # 
 # include debian-based(apt) or redhat-based(yum) vars
 # 
 - name: Inlcude vars for global dependencies
-  ansible.builtin.include_vars: "{{lookup('ansible.builtin.first_found', params)}}"
+  ansible.builtin.include_vars: "{{ lookup('ansible.builtin.first_found', params) }}"
   vars:
     params:
       files:
-        - '{{ ansible_distribution | lower }}-{{ ansible_distribution_major_version }}.yml'
-        - '{{ ansible_distribution | lower }}.yml'
-        - '{{ ansible_os_family | lower }}.yml'
+        - "{{ ansible_distribution | lower }}-{{ ansible_distribution_major_version }}.yml"
+        - "{{ ansible_distribution | lower }}.yml"
+        - "{{ ansible_os_family | lower }}.yml"
       paths:
-        - 'vars/global'
+        - vars/global
 
 #  Install global plugin dependencies
 # - name: Install global dependencies with ansible.builtin.package
@@ -21,8 +22,6 @@
 #   register: package_result
 #   until: package_result is succeeded
 #   become: true
-
-
 
 # Install global plugin dependencies
 # For Debian-based, use apt

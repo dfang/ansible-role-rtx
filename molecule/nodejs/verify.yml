@@ -34,5 +34,3 @@
     - name: Assert nodejs version
       ansible.builtin.assert:
         that: "'v16.14.0' in nodejs_version.stdout"
-
-

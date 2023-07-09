@@ -1,7 +1,6 @@
+---
 # python-build dependencies
 # https://github.com/pyenv/pyenv/wiki#suggested-build-environment
-
-
 # TODO: support Amazon Linux 2 and Fedora 22+ and openSUSE
 rtx_apt_python_dependencies:
   - build-essential
@@ -19,7 +18,7 @@ rtx_apt_python_dependencies:
   - libffi-dev
   - liblzma-dev
 
-rtx_yum_python_dependencies: 
+rtx_yum_python_dependencies:
   - gcc
   - make
   - patch

@@ -1,5 +1,5 @@
 ---
-rtx_download_url: "https://ghproxy.com/https://github.com/jdxcode/rtx/releases/download/{{ rtx_version }}/rtx-{{ rtx_version }}-{{ ansible_system }}-x64"
+rtx_download_url: https://ghproxy.com/https://github.com/jdxcode/rtx/releases/download/{{ rtx_version }}/rtx-{{ rtx_version }}-{{ ansible_system }}-x64
 rtx_version: v1.30.4
 rtx_user: root
 rtx_group: root
@@ -28,7 +28,5 @@ system_wide: true
 #     delete_versions: []
 #     global: 20.1
 rtx_plugins: []
-
-
 apt_cache_valid_time: 86400
 remote_package_retries: 5

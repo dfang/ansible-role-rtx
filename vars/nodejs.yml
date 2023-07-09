@@ -1,16 +1,17 @@
+---
 # node-build dependencies
 # https://github.com/nodenv/node-build/wiki#suggested-build-environment
 # https://github.com/nodejs/node/blob/main/BUILDING.md#unix-and-macos
 
 # TODO: Add Fedora and OpenSUSE support
 rtx_apt_nodejs_dependencies:
-- python3
-- python3-pip
-# - g++
-- make
+  - python3
+  - python3-pip
+  # - g++
+  - make
 
 rtx_yum_nodejs_dependencies:
-- python3
-- python3-pip
-# - g++
-- make
+  - python3
+  - python3-pip
+  # - g++
+  - make

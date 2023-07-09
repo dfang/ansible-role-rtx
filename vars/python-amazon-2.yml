@@ -1,4 +1,5 @@
-rtx_yum_python_dependencies: 
+---
+rtx_yum_python_dependencies:
   - gcc
   - make
   - patch
@@ -14,7 +15,6 @@ rtx_yum_python_dependencies:
   - tk-devel
   - libffi-devel
   - xz-devel
-
 
 # ModuleNotFoundError: No module named '_ssl'
 # ERROR: The Python ssl extension was not compiled. Missing the OpenSSL lib?

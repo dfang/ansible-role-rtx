@@ -1,8 +1,9 @@
+---
 # TODO: Add Fedora and OpenSUSE support
 rtx_apt_golang_dependencies:
-- coreutils
-- curl
+  - coreutils
+  - curl
 
 rtx_yum_golang_dependencies:
-- coreutils
-- curl
+  - coreutils
+  - curl

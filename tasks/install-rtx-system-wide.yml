@@ -1,11 +1,10 @@
 ---
-
 # 
 # Set rtx_dir
 # 
 - name: Set rtx_dir to /opt/rtx when system_wide is true
   ansible.builtin.set_fact:
-    rtx_dir: "/opt/rtx"
+    rtx_dir: /opt/rtx
   when: system_wide is true
 
 - name: Ensure rtx_dir presence and ownership
@@ -17,7 +16,7 @@
     mode: "0755"
 
 # - name: set facts
-#   set_fact:
+#   ansible.builtin.set_fact:
 #     cpu_type: 'x64'
 #     when: ansible_architecture == "x86_64"
 

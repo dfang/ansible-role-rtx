@@ -27,7 +27,7 @@
   ansible.builtin.import_tasks: install-plugin-specific-dependencies.yml
 
 - name: "Extract name into a list and register variable plugins_to_install from vars: rtx_plugins"
-  set_fact:
+  ansible.builtin.set_fact:
     plugins_to_install: "{{ rtx_plugins | map(attribute='name') | list }}"
 
 # - debug:

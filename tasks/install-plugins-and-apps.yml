@@ -1,5 +1,4 @@
 ---
-
 # Install rtx plugins
 - name: Install plugins
   ansible.builtin.command: bash -lc '/usr/local/bin/rtx plugins add {{ item.name }} {{ item.repository | default() }}'
@@ -11,8 +10,8 @@
   become_user: "{{ rtx_user }}"
   # ignore_errors: true
 
-- name: "{{item}} specific tasks"
-  ansible.builtin.include_tasks: "plugins/{{item}}.yml"
+- name: Specific tasks for {{ item }}
+  ansible.builtin.include_tasks: plugins/{{ item }}.yml
   loop:
     - nodejs
     - python
@@ -22,8 +21,8 @@
     - ruby
     - java
     - php
-  when: 'item in plugins_to_install'
-  ignore_errors: yes
+  when: item in plugins_to_install
+  ignore_errors: true
 
 # # Install plugin dependencies for build environment
 # - name: Nodejs specific tasks
@@ -56,9 +55,6 @@
 #   when: '"php" in item["name"]'
 #   with_items: "{{ rtx_plugins }}"
 
-
-
-
 - name: Install apps
   ansible.builtin.command: bash -lc '/usr/local/bin/rtx install {{ item.0.name }}@{{ item.1 }}'
   args:
@@ -85,11 +81,9 @@
   become: true
   become_user: "{{ rtx_user }}"
 
-
-
-
 - name: Set global app versions
-  ansible.builtin.command: bash -lc '/usr/local/bin/rtx global {{ item.name }}@{{ item.global | default(item.versions | difference(item.delete_versions|default([])) | sort | first) }}'
+  ansible.builtin.command: bash -lc '/usr/local/bin/rtx global {{ item.name }}@{{ item.global | default(item.versions | difference(item.delete_versions|default([]))
+    | sort | first) }}'
   when: item.versions is defined
   with_items: "{{ rtx_plugins }}"
   become: true

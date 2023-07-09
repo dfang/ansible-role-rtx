@@ -34,5 +34,3 @@
     - name: Assert python version
       ansible.builtin.assert:
         that: "'3.10.12' in python_version.stdout"
-
-

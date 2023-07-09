@@ -2,15 +2,15 @@
 - name: Converge
   hosts: all
   tasks:
-    - name: "Include ansible-role-rtx"
+    - name: Include ansible-role-rtx
       ansible.builtin.include_role:
-        name: "ansible-role-rtx"
+        name: ansible-role-rtx
       vars:
         rtx_plugins:
-          - name: "nodejs"
-            repository: "https://github.com/rtx-plugins/rtx-nodejs"
-            versions: ["16.14.0"]
-            global: "16.14.0"
+          - name: nodejs
+            repository: https://github.com/rtx-plugins/rtx-nodejs
+            versions: [16.14.0]
+            global: 16.14.0
     # - role: ansible-role-rtx
     #   rtx_plugins:
     #     - name: "nodejs"

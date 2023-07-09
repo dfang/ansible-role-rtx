@@ -1,3 +1,4 @@
+---
 rtx_global_dependencies:
   - "@Development tools"
   - autoconf

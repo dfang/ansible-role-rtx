@@ -2,8 +2,8 @@
 - name: Converge
   hosts: all
   tasks:
-    - name: "Include ansible-role-rtx"
+    - name: Include ansible-role-rtx
       ansible.builtin.include_role:
-        name: "ansible-role-rtx"
+        name: ansible-role-rtx
       vars:
         rtx_version: v1.30.4

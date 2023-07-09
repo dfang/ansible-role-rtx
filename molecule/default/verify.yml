@@ -18,7 +18,7 @@
     #     var: ansible_facts.services
 
     - name: Populate rtx version
-      ansible.builtin.shell: rtx version
+      ansible.builtin.command: rtx version
       register: rtx_version
 
     - name: Print rtx version

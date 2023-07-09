@@ -1,5 +1,4 @@
 ---
-
 - name: Install rtx binary to /usr/local/bin/
   ansible.builtin.get_url:
     # https://github.com/jdxcode/rtx/releases/download/v1.30.4/rtx-v1.30.4-linux-arm64
@@ -35,8 +34,6 @@
 #     rtx_dir: "{{ getent_passwd[rtx_user][4] }}/.local/share/bin/"
 #   when: rtx_dir is undefined and system_wide is false
 
-
-
 # - name: Ensure rtx_dir presence and ownership
 #   ansible.builtin.file:
 #     path: "{{ rtx_dir }}"
@@ -49,8 +46,6 @@
 # #   set_fact:
 # #     cpu_type: 'x64'
 # #     when: ansible_architecture == "x86_64"
-
-
 
 # - name: Get user home directory
 #   ansible.builtin.shell: >

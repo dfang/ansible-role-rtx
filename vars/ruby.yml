@@ -1,3 +1,4 @@
+---
 # python-build dependencies
 # https://github.com/rbenv/ruby-build/wiki#suggested-build-environment
 
@@ -19,7 +20,7 @@ rtx_apt_ruby_dependencies:
   - libdb-dev
   - uuid-dev
 
-rtx_yum_ruby_dependencies: 
+rtx_yum_ruby_dependencies:
   - gcc-6
   - patch
   - bzip2

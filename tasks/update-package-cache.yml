@@ -1,3 +1,4 @@
+---
 # - name: Gather the package facts
 #   ansible.builtin.package_facts:
 #     manager: auto
@@ -13,8 +14,8 @@
 
 - name: Update Package Cache using apt (Ubuntu/Debian)
   tags: always
-  apt:
-    update_cache: yes
+  ansible.builtin.apt:
+    update_cache: true
     cache_valid_time: 3600
   changed_when: false
   when: ansible_os_family == "Debian"
@@ -28,14 +29,14 @@
 
 - name: Update Package Cache using dnf (CentOS8/Fedora/RockyLinux)
   tags: always
-  dnf:
-    update_cache: yes
+  ansible.builtin.dnf:
+    update_cache: true
   changed_when: false
   when: ansible_pkg_mgr == "dnf"
 
 - name: Update Package Cache using yum (AmazonLinux2)
   tags: always
-  yum:
-    update_cache: yes
+  ansible.builtin.yum:
+    update_cache: true
   changed_when: false
   when: ansible_distribution == "Amazon"
