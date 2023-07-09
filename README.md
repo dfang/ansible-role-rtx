@@ -40,8 +40,6 @@ support these linux operating systems except centos7(because of GLIBC_2.18 requi
 - ubuntu2004  
 - ubuntu2204  
 
-
-
 Role Variables
 --------------
 
@@ -156,7 +154,8 @@ https://hexdocs.pm/elixir/compatibility-and-deprecations.html#compatibility-betw
 TODO
 -------
 
-more test with molecule and update meta/main.yml
+- add oracle linux and opensuse support
+- more test with molecule and update meta/main.yml
 
 License
 -------

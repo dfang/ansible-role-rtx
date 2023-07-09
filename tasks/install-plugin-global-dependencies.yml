@@ -1,24 +1,3 @@
-# #  Install global plugin dependencies
-# - name: Install global dependencies with apt
-#   ansible.builtin.apt:
-#     name: "{{ rtx_apt_global_dependencies }}"
-#     install_recommends: false
-#     cache_valid_time: "{{ apt_cache_valid_time }}"
-#   retries: "{{ remote_package_retries }}"
-#   register: apt_result
-#   until: apt_result is succeeded
-#   become: true
-#   when: ansible_os_family == "Debian"
-
-# - name: Install global dependencies with yum
-#   ansible.builtin.yum:
-#     name: "{{ rtx_yum_global_dependencies }}"
-#   retries: "{{ remote_package_retries }}"
-#   register: yum_result
-#   until: yum_result is succeeded
-#   become: true
-#   when: ansible_os_family == "RedHat"
-
 # 
 # include debian-based(apt) or redhat-based(yum) vars
 # 
@@ -34,11 +13,48 @@
         - 'vars/global'
 
 #  Install global plugin dependencies
-- name: Install global dependencies with ansible.builtin.package
-  ansible.builtin.package:
+# - name: Install global dependencies with ansible.builtin.package
+#   ansible.builtin.package:
+#     name: "{{ rtx_global_dependencies }}"
+#     state: present
+#   retries: "{{ remote_package_retries }}"
+#   register: package_result
+#   until: package_result is succeeded
+#   become: true
+
+
+
+# Install global plugin dependencies
+# For Debian-based, use apt
+# For RedHat-based, use dnf instead of yum if dnf available, otherwise use yum (AmazonLinux2)
+- name: Install global dependencies with apt
+  ansible.builtin.apt:
+    name: "{{ rtx_global_dependencies }}"
+    state: present
+    install_recommends: false
+    cache_valid_time: "{{ apt_cache_valid_time }}"
+  retries: "{{ remote_package_retries }}"
+  register: apt_result
+  until: apt_result is succeeded
+  become: true
+  when: ansible_os_family == "Debian"
+
+- name: Install global dependencies with dnf(Fedora/Rocky/CentOS8)
+  ansible.builtin.dnf:
     name: "{{ rtx_global_dependencies }}"
     state: present
   retries: "{{ remote_package_retries }}"
-  register: package_result
-  until: package_result is succeeded
+  register: dnf_result
+  until: dnf_result is succeeded
   become: true
+  when: ansible_pkg_mgr == "dnf"
+
+- name: Install global dependencies with yum(AmazonLinux2)
+  ansible.builtin.yum:
+    name: "{{ rtx_global_dependencies }}"
+    state: present
+  retries: "{{ remote_package_retries }}"
+  register: yum_result
+  until: yum_result is succeeded
+  become: true
+  when: ansible_distribution == "Amazon"

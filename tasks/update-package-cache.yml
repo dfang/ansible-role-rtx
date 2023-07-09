@@ -11,32 +11,31 @@
 # | centos8                  | CentOS               | RedHat            | dnf             |
 # | amazonlinux2             | Amazon               | RedHat            | yum             |
 
-- name: Update Package Cache (apt/Ubuntu/Debian)
+- name: Update Package Cache using apt (Ubuntu/Debian)
   tags: always
   apt:
     update_cache: yes
-  # changed_when: false
+    cache_valid_time: 3600
+  changed_when: false
   when: ansible_os_family == "Debian"
 
-- name: Update Package Cache (yum/CentOS)
-  tags: always
-  yum:
-    update_cache: yes
-  changed_when: false
-  when: ansible_os_family == "RedHat"
-
-# - name: Update Package Cache (dnf/CentOS8、dnf/Fedora、dnf/RockyLinux)
-#   tags: always
-#   dnf:
-#     update_cache: yes
-#   changed_when: false
-#   when: ansible_distribution == "CentOS"
-
-# - name: Update Package Cache (yum/Amazon)
+# - name: Update Package Cache (yum/CentOS)
 #   tags: always
 #   yum:
 #     update_cache: yes
 #   changed_when: false
-#   when: ansible_distribution == "Amazon"
+#   when: ansible_os_family == "RedHat"
 
+- name: Update Package Cache using dnf (CentOS8/Fedora/RockyLinux)
+  tags: always
+  dnf:
+    update_cache: yes
+  changed_when: false
+  when: ansible_pkg_mgr == "dnf"
 
+- name: Update Package Cache using yum (AmazonLinux2)
+  tags: always
+  yum:
+    update_cache: yes
+  changed_when: false
+  when: ansible_distribution == "Amazon"
