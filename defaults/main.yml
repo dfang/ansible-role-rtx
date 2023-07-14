@@ -1,6 +1,6 @@
 ---
 rtx_download_url: https://ghproxy.com/https://github.com/jdxcode/rtx/releases/download/{{ rtx_version }}/rtx-{{ rtx_version }}-{{ ansible_system }}-x64
-rtx_version: v1.30.4
+rtx_version: v1.34.1
 rtx_user: root
 rtx_group: root
 
