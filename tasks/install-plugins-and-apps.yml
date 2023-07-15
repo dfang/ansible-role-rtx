@@ -1,7 +1,7 @@
 ---
 # Install rtx plugins
 - name: Install plugins
-  ansible.builtin.shell: >
+  ansible.builtin.shell: |
     set -o pipefail
     /usr/local/bin/rtx plugins add {{ item.name }} {{ item.repository | default() }}
   args:
@@ -56,7 +56,7 @@
 #   with_items: "{{ rtx_plugins }}"
 
 - name: Install apps
-  ansible.builtin.shell: >
+  ansible.builtin.shell: |
     set -o pipefail
     /usr/local/bin/rtx install {{ item.0.name }}@{{ item.1 }}
   args:
@@ -71,7 +71,7 @@
   become_user: "{{ rtx_user }}"
 
 - name: Uninstall apps
-  ansible.builtin.shell: >
+  ansible.builtin.shell: |
     set -o pipefail
     /usr/local/bin/rtx uninstall {{ item.0.name }}@{{ item.1 }}
   args:
@@ -86,7 +86,7 @@
   become_user: "{{ rtx_user }}"
 
 - name: Set global app versions
-  ansible.builtin.shell: >
+  ansible.builtin.shell: |
     set -o pipefail
     /usr/local/bin/rtx global {{ item.name }}@{{ item.global | default(item.versions | difference(item.delete_versions|default([])) | sort | first) }}
   when: item.versions is defined
