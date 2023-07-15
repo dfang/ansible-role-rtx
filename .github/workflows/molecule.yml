@@ -76,6 +76,8 @@ on:
   push:
     branches:
       - master
+  pull_request:
+    types: [ready_for_review, review_requested]
   pull_request_review:
     types:
       - submitted
