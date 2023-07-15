@@ -1,0 +1,17 @@
+---
+- name: Verify
+  hosts: all
+  gather_facts: false
+  tasks:
+    - name: Populate go version
+      ansible.builtin.command: go --version
+      register: go_version
+      changed_when: false
+
+    - name: Print go version
+      ansible.builtin.debug:
+        var: go_version.stdout
+
+    - name: Assert go version
+      ansible.builtin.assert:
+        that: "'1.18' in go_version.stdout"

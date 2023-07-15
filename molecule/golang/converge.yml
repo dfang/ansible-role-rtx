@@ -1,0 +1,13 @@
+---
+- name: Converge
+  hosts: all
+  tasks:
+    - name: Include ansible-role-rtx
+      ansible.builtin.include_role:
+        name: ansible-role-rtx
+      vars:
+        rtx_plugins:
+          - name: go
+            repository: https://ghproxy.com/https://github.com/rtx-plugins/rtx-golang
+            versions: [1.18]
+            global: 1.18

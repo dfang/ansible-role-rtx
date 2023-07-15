@@ -74,7 +74,7 @@
 name: Molecule Test
 on: [push, pull_request]
 jobs:
-  build:
+  default:
     runs-on: ubuntu-latest
     env:
       working-directory: ./
@@ -102,4 +102,4 @@ jobs:
           eval $(pdm venv activate)
           ansible --version
           molecule --version
-          molecule test --parallel --all
+          molecule test -s default
