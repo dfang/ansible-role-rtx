@@ -71,8 +71,14 @@
 # use https://ansible.readthedocs.io/projects/molecule/ci/#github-actions
 
 ---
-name: Molecule Test
-on: [push, pull_request]
+name: Molecule Test on default scenario
+on:
+  push:
+    branches:
+      - master
+  pull_request_review:
+    types:
+      - submitted
 jobs:
   default:
     runs-on: ubuntu-latest

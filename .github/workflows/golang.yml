@@ -1,6 +1,12 @@
 ---
-name: Molecule Test
-on: [push, pull_request]
+name: Molecule Test on golang scenario
+on:
+  push:
+    branches:
+      - master
+  pull_request_review:
+    types:
+      - submitted
 jobs:
   golang:
     runs-on: ubuntu-latest
