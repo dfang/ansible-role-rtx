@@ -2,6 +2,7 @@
 # Install rtx plugins
 - name: Install plugins
   ansible.builtin.shell: |
+    #! /usr/bin/env bash
     set -o pipefail
     /usr/local/bin/rtx plugins add {{ item.name }} {{ item.repository | default() }}
   args:
@@ -57,6 +58,7 @@
 
 - name: Install apps
   ansible.builtin.shell: |
+    #! /usr/bin/env bash
     set -o pipefail
     /usr/local/bin/rtx install {{ item.0.name }}@{{ item.1 }}
   args:
@@ -72,6 +74,7 @@
 
 - name: Uninstall apps
   ansible.builtin.shell: |
+    #! /usr/bin/env bash
     set -o pipefail
     /usr/local/bin/rtx uninstall {{ item.0.name }}@{{ item.1 }}
   args:
@@ -87,6 +90,7 @@
 
 - name: Set global app versions
   ansible.builtin.shell: |
+    #! /usr/bin/env bash
     set -o pipefail
     /usr/local/bin/rtx global {{ item.name }}@{{ item.global | default(item.versions | difference(item.delete_versions|default([])) | sort | first) }}
   when: item.versions is defined
