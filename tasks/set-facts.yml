@@ -3,7 +3,9 @@
   ansible.builtin.shell:
     cmd: "which bash"
   register: bash_path_result
+  changed_when: false
 
 - name: Set facts
   set_fact:
     bash_executable_path: "{{ bash_path_result.stdout }}"
+  when: bash_executable_path is not defined
