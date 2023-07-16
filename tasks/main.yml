@@ -17,6 +17,9 @@
 - name: Install rtx
   ansible.builtin.import_tasks: install-rtx.yml
 
+- name: Set facts
+  ansible.builtin.import_tasks: set-facts.yml
+
 - name: Update package cache
   ansible.builtin.import_tasks: update-package-cache.yml
 

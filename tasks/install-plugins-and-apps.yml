@@ -1,10 +1,12 @@
 ---
 # Install rtx plugins
 - name: Install plugins
-  ansible.builtin.shell: |
-    #! /usr/bin/env bash
-    set -o pipefail
-    /usr/local/bin/rtx plugins add {{ item.name }} {{ item.repository | default() }}
+  ansible.builtin.shell:
+    executable: ansible_facts['bash_executable_path']
+    cmd: |
+      #! /usr/bin/env bash
+      set -o pipefail
+      rtx plugins add {{ item.name }} {{ item.repository | default() }}
   args:
     creates: "{{ rtx_dir }}/plugins/{{ item.name }}"
   with_items: "{{ rtx_plugins }}"
@@ -57,10 +59,12 @@
 #   with_items: "{{ rtx_plugins }}"
 
 - name: Install apps
-  ansible.builtin.shell: |
-    #! /usr/bin/env bash
-    set -o pipefail
-    /usr/local/bin/rtx install {{ item.0.name }}@{{ item.1 }}
+  ansible.builtin.shell:
+    executable: ansible_facts['bash_executable_path']
+    cmd: |
+      #! /usr/bin/env bash
+      set -o pipefail
+      rtx install {{ item.0.name }}@{{ item.1 }}
   args:
     creates: "{{ rtx_dir }}/installs/{{ item.0.name }}/{{ item.1 }}"
   with_subelements:
@@ -73,10 +77,12 @@
   become_user: "{{ rtx_user }}"
 
 - name: Uninstall apps
-  ansible.builtin.shell: |
-    #! /usr/bin/env bash
-    set -o pipefail
-    /usr/local/bin/rtx uninstall {{ item.0.name }}@{{ item.1 }}
+  ansible.builtin.shell:
+    executable: ansible_facts['bash_executable_path']
+    cmd: |
+      #! /usr/bin/env bash
+      set -o pipefail
+      rtx uninstall {{ item.0.name }}@{{ item.1 }}
   args:
     removes: "{{ rtx_dir }}/installs/{{ item.0.name }}/{{ item.1 }}"
   with_subelements:
@@ -89,10 +95,12 @@
   become_user: "{{ rtx_user }}"
 
 - name: Set global app versions
-  ansible.builtin.shell: |
-    #! /usr/bin/env bash
-    set -o pipefail
-    /usr/local/bin/rtx global {{ item.name }}@{{ item.global | default(item.versions | difference(item.delete_versions|default([])) | sort | first) }}
+  ansible.builtin.shell:
+    executable: ansible_facts['bash_executable_path']
+    cmd: |
+      #! /usr/bin/env bash
+      set -o pipefail
+      rtx global {{ item.name }}@{{ item.global | default(item.versions | difference(item.delete_versions|default([])) | sort | first) }}
   when: item.versions is defined
   with_items: "{{ rtx_plugins }}"
   become: true
