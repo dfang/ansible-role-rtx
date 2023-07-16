@@ -30,3 +30,11 @@ system_wide: true
 rtx_plugins: []
 apt_cache_valid_time: 86400
 remote_package_retries: 5
+
+rtx_python_repository: "https://github.com/rtx-plugins/rtx-python"
+rtx_nodejs_repository: "https://github.com/rtx-plugins/rtx-nodejs"
+rtx_node_repository: "https://github.com/rtx-plugins/rtx-nodejs"
+rtx_golang_repository: "https://github.com/rtx-plugins/rtx-golang"
+rtx_go_repository: "https://github.com/rtx-plugins/rtx-golang"
+rtx_ruby_repository: "https://github.com/rtx-plugins/rtx-ruby"
+rtx_java_repository: "https://github.com/rtx-plugins/rtx-java"

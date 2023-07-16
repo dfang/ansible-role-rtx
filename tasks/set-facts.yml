@@ -1,0 +1,9 @@
+# set facts
+- name: Determine Bash executable path
+  ansible.builtin.shell:
+    cmd: "which bash"
+  register: bash_path_result
+
+- name: Set facts
+  ansible.builtin.set_fact:
+    bash_executable_path: "{{ bash_path_result.stdout }}"

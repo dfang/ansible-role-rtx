@@ -1,15 +1,67 @@
 ---
 # Install rtx plugins
+
+# TODO: need to figure out why not work
+# rtx plugins add {{ item.name }} {{ item.repository | default('rtx_' + item.name + '_repository' | default('')) }}
+# rtx plugins add {{ item.name }} {{ item.repository | lookup('ansible.builtin.vars', 'rtx_' + item.name + '_repository') }} could not load lookup
+
+# 1
+# - name: Install plugins with custom plugin repository
+#   ansible.builtin.shell:
+#     executable: "{{ bash_executable_path }}"
+#     cmd: |
+#       #! /usr/bin/env bash
+#       set -o pipefail
+#       rtx plugins add {{ item.name }} {{ item.repository | default() }}
+#   args:
+#     creates: "{{ rtx_dir }}/plugins/{{ item.name }}"
+#   with_items: "{{ rtx_plugins }}"
+#   when: rtx_plugins | length > 0 and item.repository is defined
+#   become: true
+#   become_user: "{{ rtx_user }}"
+
+# 2
+# - name: Install plugins
+#   ansible.builtin.shell:
+#     executable: "{{ bash_executable_path }}"
+#     cmd: |
+#       #! /usr/bin/env bash
+#       set -o pipefail
+#       rtx plugins add {{ item.name }} {{ lookup('ansible.builtin.vars', 'rtx_' + item.name + '_repository', default='') }}
+#   args:
+#     creates: "{{ rtx_dir }}/plugins/{{ item.name }}"
+#   with_items: "{{ rtx_plugins }}"
+#   when: rtx_plugins | length > 0 and item.repository is undefined
+#   become: true
+#   become_user: "{{ rtx_user }}"
+
+# 3 = 1 + 2
 - name: Install plugins
-  ansible.builtin.shell: |
-    set -o pipefail
-    /usr/local/bin/rtx plugins add {{ item.name }} {{ item.repository | default() }}
+  ansible.builtin.shell:
+    executable: "{{ bash_executable_path }}"
+    cmd: |
+      #! /usr/bin/env bash
+      set -o pipefail
+      rtx plugins add {{ item.name }} {{ item.repository | default(lookup('ansible.builtin.vars', 'rtx_' + item.name + '_repository', default='')) }}
   args:
     creates: "{{ rtx_dir }}/plugins/{{ item.name }}"
   with_items: "{{ rtx_plugins }}"
   when: rtx_plugins | length > 0
   become: true
   become_user: "{{ rtx_user }}"
+
+- name: Specific tasks for {{ item }}
+  ansible.builtin.include_tasks: plugins/{{ item }}.yml
+  loop:
+    - nodejs
+    - python
+    - golang
+    - ruby
+    - erlang
+    - ruby
+    - java
+    - php
+  when: item in plugins_to_install
 
 - name: Specific tasks for {{ item }}
   ansible.builtin.include_tasks: plugins/{{ item }}.yml
@@ -56,9 +108,12 @@
 #   with_items: "{{ rtx_plugins }}"
 
 - name: Install apps
-  ansible.builtin.shell: |
-    set -o pipefail
-    /usr/local/bin/rtx install {{ item.0.name }}@{{ item.1 }}
+  ansible.builtin.shell:
+    executable: "{{ bash_executable_path }}"
+    cmd: |
+      #! /usr/bin/env bash
+      set -o pipefail
+      rtx install {{ item.0.name }}@{{ item.1 }}
   args:
     creates: "{{ rtx_dir }}/installs/{{ item.0.name }}/{{ item.1 }}"
   with_subelements:
@@ -71,9 +126,12 @@
   become_user: "{{ rtx_user }}"
 
 - name: Uninstall apps
-  ansible.builtin.shell: |
-    set -o pipefail
-    /usr/local/bin/rtx uninstall {{ item.0.name }}@{{ item.1 }}
+  ansible.builtin.shell:
+    executable: "{{ bash_executable_path }}"
+    cmd: |
+      #! /usr/bin/env bash
+      set -o pipefail
+      rtx uninstall {{ item.0.name }}@{{ item.1 }}
   args:
     removes: "{{ rtx_dir }}/installs/{{ item.0.name }}/{{ item.1 }}"
   with_subelements:
@@ -86,9 +144,12 @@
   become_user: "{{ rtx_user }}"
 
 - name: Set global app versions
-  ansible.builtin.shell: |
-    set -o pipefail
-    /usr/local/bin/rtx global {{ item.name }}@{{ item.global | default(item.versions | difference(item.delete_versions|default([])) | sort | first) }}
+  ansible.builtin.shell:
+    executable: "{{ bash_executable_path }}"
+    cmd: |
+      #! /usr/bin/env bash
+      set -o pipefail
+      rtx global {{ item.name }}@{{ item.global | default(item.versions | difference(item.delete_versions|default([])) | sort | first) }}
   when: item.versions is defined
   with_items: "{{ rtx_plugins }}"
   become: true
