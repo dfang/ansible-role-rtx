@@ -8,7 +8,7 @@
 
 - name: Get user home directory
   ansible.builtin.shell:
-    executable: ansible_facts['bash_executable_path']
+    executable: "{{ bash_executable_path }}"
     cmd: |
       #! /usr/bin/env bash
       set -o pipefail
