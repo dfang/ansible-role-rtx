@@ -49,4 +49,3 @@
       echo bashrc sourced
   changed_when: false
   become_user: "{{ ansible_user }}"
-
