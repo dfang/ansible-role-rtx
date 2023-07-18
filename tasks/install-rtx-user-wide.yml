@@ -35,7 +35,7 @@
 - name: Source bashrc
   ansible.builtin.shell: source {{ user_home.stdout }}/.bashrc && echo bashrc sourced
   args:
-    executable: {{ bash_executable_path }}
+    executable: bash_executable_path
   changed_when: false
 
 # - name: Get users HOME
