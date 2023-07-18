@@ -11,6 +11,7 @@
 #     - golang
 #     - ruby
 #     - erlang
+#     - elixir
 #     - ruby
 #     - php
 #   ignore_errors: yes
@@ -23,6 +24,7 @@
     - golang
     - ruby
     - erlang
+    - elixir
     - ruby
     - java
     - php

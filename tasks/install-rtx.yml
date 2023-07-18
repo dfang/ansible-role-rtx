@@ -1,15 +1,23 @@
 ---
+- name: Ensure rtx_binary_installation_path presence and ownership
+  ansible.builtin.file:
+    path: "{{ rtx_binary_installation_path }}"
+    owner: "{{ ansible_user }}"
+    # group: "{{ rtx_group }}"
+    state: directory
+    mode: "0755"
+
 - name: Install rtx binary to rtx_binary_installation_path
   ansible.builtin.get_url:
     # https://github.com/jdxcode/rtx/releases/download/v1.30.4/rtx-v1.30.4-linux-arm64
     url: "{{ rtx_download_url }}"
     # dest: /usr/local/bin/rtx
-    dest: "{{ rtx_binary_installation_path }}"
+    dest: "{{ rtx_binary_installation_path }}/rtx"
     mode: "755"
 
-- name: Install rtx system wide
-  ansible.builtin.import_tasks: install-rtx-system-wide.yml
-  when: system_wide is true
+# - name: Install rtx system wide
+#   ansible.builtin.import_tasks: install-rtx-system-wide.yml
+#   when: system_wide is true
 
 - name: Install rtx user wide
   ansible.builtin.import_tasks: install-rtx-user-wide.yml

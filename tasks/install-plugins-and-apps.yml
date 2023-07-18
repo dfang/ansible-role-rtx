@@ -18,7 +18,7 @@
 #   with_items: "{{ rtx_plugins }}"
 #   when: rtx_plugins | length > 0 and item.repository is defined
 #   become: true
-#   become_user: "{{ rtx_user }}"
+#   become_user: "{{ ansible_user }}"
 
 # 2
 # - name: Install plugins
@@ -33,7 +33,7 @@
 #   with_items: "{{ rtx_plugins }}"
 #   when: rtx_plugins | length > 0 and item.repository is undefined
 #   become: true
-#   become_user: "{{ rtx_user }}"
+#   become_user: "{{ ansible_user }}"
 
 # 3 = 1 + 2
 - name: Install plugins
@@ -42,13 +42,13 @@
     cmd: |
       #! /usr/bin/env bash
       set -o pipefail
-      rtx plugins add {{ item.name }} {{ item.repository | default(lookup('ansible.builtin.vars', 'rtx_' + item.name + '_repository', default='')) }}
+      {{ rtx_binary_installation_path }}/rtx plugins add {{ item.name }} {{ item.repository | default(lookup('ansible.builtin.vars', 'rtx_' + item.name + '_repository', default='')) }}
   args:
-    creates: "{{ rtx_dir }}/plugins/{{ item.name }}"
+    creates: "{{ rtx_data_dir }}/plugins/{{ item.name }}"
   with_items: "{{ rtx_plugins }}"
   when: rtx_plugins | length > 0
   become: true
-  become_user: "{{ rtx_user }}"
+  become_user: "{{ ansible_user }}"
 
 - name: Specific tasks for {{ item }}
   ansible.builtin.include_tasks: plugins/{{ item }}.yml
@@ -113,9 +113,9 @@
     cmd: |
       #! /usr/bin/env bash
       set -o pipefail
-      rtx install {{ item.0.name }}@{{ item.1 }}
+      {{ rtx_binary_installation_path }}/rtx install {{ item.0.name }}@{{ item.1 }}
   args:
-    creates: "{{ rtx_dir }}/installs/{{ item.0.name }}/{{ item.1 }}"
+    creates: "{{ rtx_data_dir }}/installs/{{ item.0.name }}/{{ item.1 }}"
   with_subelements:
     - "{{ rtx_plugins }}"
     - versions
@@ -123,7 +123,7 @@
       skip_missing: true
   when: rtx_plugins | length > 0
   become: true
-  become_user: "{{ rtx_user }}"
+  become_user: "{{ ansible_user }}"
 
 - name: Uninstall apps
   ansible.builtin.shell:
@@ -131,9 +131,9 @@
     cmd: |
       #! /usr/bin/env bash
       set -o pipefail
-      rtx uninstall {{ item.0.name }}@{{ item.1 }}
+      {{ rtx_binary_installation_path }}/rtx uninstall {{ item.0.name }}@{{ item.1 }}
   args:
-    removes: "{{ rtx_dir }}/installs/{{ item.0.name }}/{{ item.1 }}"
+    removes: "{{ rtx_data_dir }}/installs/{{ item.0.name }}/{{ item.1 }}"
   with_subelements:
     - "{{ rtx_plugins }}"
     - delete_versions
@@ -141,7 +141,7 @@
       skip_missing: true
   when: rtx_plugins | length > 0
   become: true
-  become_user: "{{ rtx_user }}"
+  become_user: "{{ ansible_user }}"
 
 - name: Set global app versions
   ansible.builtin.shell:
@@ -149,18 +149,18 @@
     cmd: |
       #! /usr/bin/env bash
       set -o pipefail
-      rtx global {{ item.name }}@{{ item.global | default(item.versions | difference(item.delete_versions|default([])) | sort | first) }}
+      {{ rtx_binary_installation_path }}/rtx global {{ item.name }}@{{ item.global | default(item.versions | difference(item.delete_versions|default([])) | sort | first) }}
   when: item.versions is defined
   with_items: "{{ rtx_plugins }}"
   become: true
-  become_user: "{{ rtx_user }}"
+  become_user: "{{ ansible_user }}"
   changed_when: false
 
-- name: Set group permissions
-  become: true
-  ansible.builtin.file:
-    path: "{{ rtx_dir }}"
-    owner: "{{ rtx_user }}"
-    group: "{{ rtx_group }}"
-    state: directory
-    recurse: true
+# - name: Set group permissions
+#   become: true
+#   ansible.builtin.file:
+#     path: "{{ rtx_dir }}"
+#     owner: "{{ rtx_user }}"
+#     group: "{{ rtx_group }}"
+#     state: directory
+#     recurse: true

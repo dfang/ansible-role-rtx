@@ -13,8 +13,24 @@ ansible-galaxy role install dfang.rtx
 ```
 
 Install from github
+
 ```
 ansible-galaxy role install git+https://github.com/dfang/ansible-role-rtx
+```
+
+the **RECOMMEND** way is to lock dependency version in your [requirements.yml](https://docs.ansible.com/ansible/latest/galaxy/user_guide.html#installing-roles-and-collections-from-the-same-requirements-yml-file):
+
+```
+---
+collections:
+
+roles:
+  #   - name: dfang.rtx
+  #     version: v0.2
+
+  #   - src: https://github.com/dfang/ansible-role-rtx
+  #     type: git
+  #     version: main
 ```
 
 
@@ -46,34 +62,33 @@ Role Variables
 --------------
 
 ```
-system_wide: true
-rtx_user: ubuntu
-rtx_plugins:  see example playbook
+system_wide: false
+rtx_plugins: see example playbook
 ```
 
 1. only support bash shell  
 
-2. the rtx binary will always install to `/usr/local/bin/rtx`  
+2. if `system_wide: true`, `RTX_DATA_DIR` will be set to `/opt/rtx/`, rtx binary will install to `/usr/local/bin/rtx`
+   
+   if `system_wide: false`, `RTX_DATA_DIR` will be set to  `~/.local/share/rtx`, rtx binary will install to `~/bin/rtx` 
+   
+   the default is `false`. 
 
-3. if `system_wide: true`, `RTX_DATA_DIR` will be set to `/opt/rtx/`  
-   if `system_wide: false`, `RTX_DATA_DIR` will be set to  `~/.local/share/rtx`  
-   the default is `true`. 
-
-4. if `system_wide: true`, `/etc/profile.d/rtx.sh` with below content will be created
+3. if `system_wide: true`, `/etc/profile.d/rtx.sh` with below content will be created
     ```
     # {{ ansible_managed }}
 
     if [ -f "/usr/local/bin/rtx" ]; then
       export RTX_DATA_DIR=/opt/rtx
-      eval "$(rtx activate bash)"
+      eval "$(/usr/local/bin/rtx activate bash)"
     fi
     ```
 
-    if `system_wide: false`, the content below will be appended to `~/.bashrc`
+    if `system_wide: false`, these content below will be appended to `~/.bashrc`
     
     ```
     export RTX_DATA_DIR=$HOME/.local/share/rtx
-    eval "$(rtx activate bash)"
+    eval "$(~/bin/rtx activate bash)"
     ```
 
 Dependencies
@@ -87,7 +102,8 @@ Example Playbook
 
 for example: 
 
-for erlang this will install 26.0.2 and set it to global version. for nodejs, this will install versions `6.14.0`, `20.0.0` and set `20.0.0` to global version  
+for erlang this will install 26.0.2 and set it to global version.   
+for nodejs, this will install versions `6.14.0`, `20.0.0` and set `20.0.0` to global version  
 
 ```
     - hosts: servers
@@ -97,7 +113,6 @@ for erlang this will install 26.0.2 and set it to global version. for nodejs, th
         - role: "ansible-role-rtx" # or dfang.rtx
       vars:
         system_wide: false
-        rtx_user: ubuntu
         rtx_plugins:
           - name: "erlang"
             versions: ["26.0.2"]

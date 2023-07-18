@@ -1,24 +1,24 @@
 ---
-- name: Remove /etc/profile.d/rtx.sh if exists
-  ansible.builtin.file:
-    path: /etc/profile.d/rtx.sh
-    state: absent
-  become: true
-  when: system_wide is false
+# - name: Remove /etc/profile.d/rtx.sh if exists
+#   ansible.builtin.file:
+#     path: /etc/profile.d/rtx.sh
+#     state: absent
+#   become: true
+#   when: system_wide is false
 
-- name: Get user home directory
-  ansible.builtin.shell:
-    executable: "{{ bash_executable_path }}"
-    cmd: |
-      #! /usr/bin/env bash
-      set -o pipefail
-      getent passwd {{ rtx_user }}  | awk -F: '{ print $6 }'
-  changed_when: false
-  register: user_home
+# - name: Get user home directory
+#   ansible.builtin.shell:
+#     executable: "{{ bash_executable_path }}"
+#     cmd: |
+#       #! /usr/bin/env bash
+#       set -o pipefail
+#       getent passwd {{ rtx_user }}  | awk -F: '{ print $6 }'
+#   changed_when: false
+#   register: user_home
 
 - name: Update bashrc
   ansible.builtin.lineinfile:
-    dest: "{{ user_home.stdout }}/.bashrc"
+    dest: "$HOME/.bashrc"
     create: true
     mode: "0644"
     line: export RTX_DATA_DIR=$HOME/.local/share/rtx
@@ -26,37 +26,34 @@
 
 - name: Update bashrc
   ansible.builtin.lineinfile:
-    dest: "{{ user_home.stdout }}/.bashrc"
+    dest: "$HOME/.bashrc"
     create: true
     mode: "0644"
     line: eval "$(~/bin/rtx activate bash)"
     regexp: ^eval "$(~/bin/rtx activate bash)"
 
 - name: Source bashrc
-  ansible.builtin.shell: source {{ user_home.stdout }}/.bashrc && echo bashrc sourced
-  args:
-    executable: bash_executable_path
+  ansible.builtin.shell:
+    executable: "{{ bash_executable_path }}"
+    cmd: |
+      #! /usr/bin/env bash
+      set -o pipefail
+      source $HOME/.bashrc
+      echo bashrc sourced
   changed_when: false
 
-# - name: Get users HOME
-#   ansible.builtin.getent:
-#     database: passwd
-#     key: "{{ rtx_user }}"
-#     split: ":"
+# - name: Set rtx_dir variable based on home directory
+#   ansible.builtin.set_fact:
+#     rtx_dir: "$HOME/.local/share/rtx/"
 #   when: rtx_dir is undefined and system_wide is false
 
-- name: Set rtx_dir variable based on home directory
-  ansible.builtin.set_fact:
-    rtx_dir: "{{ user_home.stdout }}/.local/share/rtx/"
-  when: rtx_dir is undefined and system_wide is false
-
-# - name: Ensure rtx_dir presence and ownership
-#   ansible.builtin.file:
-#     path: "{{ rtx_dir }}"
-#     owner: "{{ rtx_user }}"
-#     group: "{{ rtx_group }}"
-#     state: directory
-#     mode: "0755"
+- name: Ensure RTX_DATA_DIR presence and ownership
+  ansible.builtin.file:
+    path: "{{ rtx_data_dir }}"
+    owner: "{{ ansible_user }}"
+    # group: "{{ rtx_group }}"
+    state: directory
+    mode: "0755"
 
 # # - name: set facts
 # #   set_fact:

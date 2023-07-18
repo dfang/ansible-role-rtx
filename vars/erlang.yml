@@ -10,6 +10,7 @@ rtx_apt_erlang_dependencies:
   - libglu1-mesa-dev
   - libpng-dev
   - libssh-dev
+  - libxml2-utils
   - unixodbc-dev
   - xsltproc
   - fop

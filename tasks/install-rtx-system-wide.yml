@@ -1,17 +1,9 @@
 ---
-# 
-# Set rtx_dir
-# 
-- name: Set rtx_dir to /opt/rtx when system_wide is true
-  ansible.builtin.set_fact:
-    rtx_dir: /opt/rtx
-  when: system_wide is true
-
-- name: Ensure rtx_dir presence and ownership
+- name: Ensure RTX_DATA_DIR presence and ownership
   ansible.builtin.file:
-    path: "{{ rtx_dir }}"
-    owner: "{{ rtx_user }}"
-    group: "{{ rtx_group }}"
+    path: "{{ rtx_data_dir }}"
+    owner: "{{ ansible_user }}"
+    # group: "{{ rtx_group }}"
     state: directory
     mode: "0755"
 
