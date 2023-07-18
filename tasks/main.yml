@@ -1,10 +1,5 @@
 ---
 # tasks file for rtx
-
-# - debug:
-#     msg: "{{ item.key }} {{ item.value|json_query('[]') }}"
-#   loop: '{{ lookup("dict", rtx_plugins) }}'
-
 - name: Print Gathered facts
   ansible.builtin.debug:
     msg:
@@ -14,11 +9,11 @@
       - "ansible_distribution_major_version: {{ ansible_distribution_major_version }}"
       - "ansible_pkg_mgr: {{ ansible_pkg_mgr }}"
 
-- name: Install rtx
-  ansible.builtin.import_tasks: install-rtx.yml
-
 - name: Set facts
   ansible.builtin.import_tasks: set-facts.yml
+
+- name: Install rtx
+  ansible.builtin.import_tasks: install-rtx.yml
 
 - name: Update package cache
   ansible.builtin.import_tasks: update-package-cache.yml

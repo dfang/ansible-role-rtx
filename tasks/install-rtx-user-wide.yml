@@ -29,13 +29,13 @@
     dest: "{{ user_home.stdout }}/.bashrc"
     create: true
     mode: "0644"
-    line: eval "$(rtx activate bash)"
-    regexp: ^eval "$(rtx activate bash)"
+    line: eval "$(~/bin/rtx activate bash)"
+    regexp: ^eval "$(~/bin/rtx activate bash)"
 
 - name: Source bashrc
   ansible.builtin.shell: source {{ user_home.stdout }}/.bashrc && echo bashrc sourced
   args:
-    executable: /bin/bash
+    executable: {{ bash_executable_path }}
   changed_when: false
 
 # - name: Get users HOME

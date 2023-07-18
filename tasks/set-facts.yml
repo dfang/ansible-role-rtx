@@ -5,7 +5,24 @@
   register: bash_path_result
   changed_when: false
 
-- name: Set facts
+- name: "Set fact when determine bash_executable_path"
   set_fact:
     bash_executable_path: "{{ bash_path_result.stdout }}"
   when: bash_executable_path is not defined
+
+# https://stackoverflow.com/a/42938544
+- name: "Set fact when determine rtx_binary_installation_path"
+  set_fact:
+    rtx_binary_installation_path: "{% if system_wide == true or user_wide == false %}/usr/local/bin/rtx{% else %}$HOME/bin/rtx{% endif %}"
+  when: rtx_binary_installation_path is not defined
+
+# https://github.com/jdxcode/rtx/tree/v1.34.1#rtx_data_dir
+- name: Set RTX_DATA_DIR to /opt/rtx when system_wide is true
+  ansible.builtin.set_fact:
+    rtx_data_dir: /opt/rtx
+  when: system_wide is true
+
+- name: Set RTX_DATA_DIR to ~/.local/share/rtx when system_wide is false
+  ansible.builtin.set_fact:
+    rtx_data_dir: ~/.local/share/rtx
+  when: system_wide is false or user_wide is true

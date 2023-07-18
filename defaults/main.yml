@@ -17,7 +17,9 @@ rtx_group: root
 # if system_wide: false, these lines will append to .bashrc 
 # export RTX_DATA_DIR=$HOME/.local/share/rtx
 # eval "$(rtx activate bash)"
-system_wide: true
+system_wide: false
+# determined in tasks/set-facts.yml
+# rtx_binary_installation_path: /usr/local/bin/rtx
 
 # by default, no plugins and apps installed, you have to pass vars to role like this
 # rtx_plugins:
@@ -28,6 +30,7 @@ system_wide: true
 #     delete_versions: []
 #     global: 20.1
 rtx_plugins: []
+
 apt_cache_valid_time: 86400
 remote_package_retries: 5
 

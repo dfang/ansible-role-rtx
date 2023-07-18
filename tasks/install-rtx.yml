@@ -1,9 +1,10 @@
 ---
-- name: Install rtx binary to /usr/local/bin/
+- name: Install rtx binary to rtx_binary_installation_path
   ansible.builtin.get_url:
     # https://github.com/jdxcode/rtx/releases/download/v1.30.4/rtx-v1.30.4-linux-arm64
     url: "{{ rtx_download_url }}"
-    dest: /usr/local/bin/rtx
+    # dest: /usr/local/bin/rtx
+    dest: "{{ rtx_binary_installation_path }}"
     mode: "755"
 
 - name: Install rtx system wide
