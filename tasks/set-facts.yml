@@ -79,14 +79,15 @@
       - java
       - php
 
-- name: Set dynamic variable like rtx_apt_{{ item }}_dependencies
-  ansible.builtin.set_fact: 
-    "{{ 'rtx_apt_' + item + '_dependencies' }}": []
-  loop: plugins_to_install
-  when: ansible_os_family == "Debian" and item not in supported_plugins
+# FIXME: Invalid data passed to 'loop', it requires a list
+# - name: Set dynamic variable like rtx_apt_{{ item }}_dependencies
+#   ansible.builtin.set_fact:
+#     "{{ 'rtx_apt_' + item + '_dependencies' }}": []
+#   loop: plugins_to_install
+#   when: ansible_os_family == "Debian" and item not in supported_plugins
 
-- name: Set dynamic variable like rtx_apt_{{ item }}_dependencies
-  ansible.builtin.set_fact: 
-    "{{ 'rtx_yum_' + item + '_dependencies' }}": []
-  loop: plugins_to_install
-  when: ansible_os_family == "RedHat" and item not in supported_plugins
+# - name: Set dynamic variable like rtx_apt_{{ item }}_dependencies
+#   ansible.builtin.set_fact:
+#     "{{ 'rtx_yum_' + item + '_dependencies' }}": []
+#   loop: plugins_to_install
+#   when: ansible_os_family == "RedHat" and item not in supported_plugins
