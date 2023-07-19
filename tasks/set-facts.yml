@@ -68,7 +68,7 @@
 
 
 - name: Set supported_plugins
-  ansible.builtin.set: 
+  ansible.builtin.set_fact:
     supported_plugins:
       - golang
       - nodejs
