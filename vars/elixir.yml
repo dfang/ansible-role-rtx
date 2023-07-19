@@ -1,0 +1,8 @@
+# https://github.com/asdf-vm/asdf-elixir#check-compatibility-between-elixir-and-erlang
+
+# Check compatibility between elixir and erlang:
+# https://hexdocs.pm/elixir/compatibility-and-deprecations.html#compatibility-between-elixir-and-erlang-otp
+
+
+rtx_apt_elixir_dependencies: []
+rtx_yum_elixir_dependencies: []

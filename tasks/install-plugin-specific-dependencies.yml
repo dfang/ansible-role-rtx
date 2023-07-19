@@ -15,6 +15,7 @@
 #     - ruby
 #     - php
 #   ignore_errors: yes
+
 # read vars from first file found, use 'vars/' relative subdir
 - name: Inlcude vars for plugins dependencies
   ansible.builtin.include_vars: "{{ lookup('ansible.builtin.first_found', params) }}"
@@ -36,3 +37,21 @@
         - "{{ item }}.yml"
       paths:
         - vars
+
+# - name: Specific tasks for {{ item }}
+#   ansible.builtin.include_tasks: plugins/{{ item }}.yml
+#   loop:
+#     - nodejs
+#     - python
+#     - golang
+#     - ruby
+#     - erlang
+#     - elixir
+#     - ruby
+#     - java
+#     - php
+#   when: item in plugins_to_install
+
+- name: Include plugin dependencies task
+  ansible.builtin.include_tasks: 
+    file: plugins/plugin.yml

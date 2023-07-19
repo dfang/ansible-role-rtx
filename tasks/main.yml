@@ -1,5 +1,4 @@
 ---
-# tasks file for rtx
 - name: Print Gathered facts
   ansible.builtin.debug:
     msg:
@@ -9,7 +8,8 @@
       - "ansible_distribution_major_version: {{ ansible_distribution_major_version }}"
       - "ansible_distribution_version: {{ ansible_distribution_version }}"
       - "ansible_pkg_mgr: {{ ansible_pkg_mgr }}"
-
+      - "ansible_user: {{ ansible_user }}"
+      
 - name: Set facts
   ansible.builtin.import_tasks: set-facts.yml
 
@@ -24,13 +24,6 @@
 
 - name: Install plugin specific dependencies
   ansible.builtin.import_tasks: install-plugin-specific-dependencies.yml
-
-- name: "Extract name into a list and register variable plugins_to_install from vars: rtx_plugins"
-  ansible.builtin.set_fact:
-    plugins_to_install: "{{ rtx_plugins | map(attribute='name') | list }}"
-
-# - debug:
-#     msg: "{{plugins_to_install}}"
 
 - name: Install plugins and apps
   ansible.builtin.import_tasks: install-plugins-and-apps.yml

@@ -42,7 +42,7 @@
     cmd: |
       #! /usr/bin/env bash
       set -o pipefail
-      {{ rtx_binary_installation_path }}/rtx plugins add {{ item.name }} {{ item.repository | default(lookup('ansible.builtin.vars', 'rtx_' + item.name + '_repository', default='')) }}
+      {{ rtx_binary_installation_path }} plugins add {{ item.name }} {{ item.repository | default(lookup('ansible.builtin.vars', 'rtx_' + item.name + '_repository', default='')) }}
   args:
     creates: "{{ rtx_data_dir }}/plugins/{{ item.name }}"
   with_items: "{{ rtx_plugins }}"
@@ -50,31 +50,18 @@
   become: true
   become_user: "{{ ansible_user }}"
 
-- name: Specific tasks for {{ item }}
-  ansible.builtin.include_tasks: plugins/{{ item }}.yml
-  loop:
-    - nodejs
-    - python
-    - golang
-    - ruby
-    - erlang
-    - ruby
-    - java
-    - php
-  when: item in plugins_to_install
-
-- name: Specific tasks for {{ item }}
-  ansible.builtin.include_tasks: plugins/{{ item }}.yml
-  loop:
-    - nodejs
-    - python
-    - golang
-    - ruby
-    - erlang
-    - ruby
-    - java
-    - php
-  when: item in plugins_to_install
+# - name: Specific tasks for {{ item }}
+#   ansible.builtin.include_tasks: plugins/{{ item }}.yml
+#   loop:
+#     - nodejs
+#     - python
+#     - golang
+#     - ruby
+#     - erlang
+#     - elixir
+#     - java
+#     - php
+#   when: item in plugins_to_install
 
 # # Install plugin dependencies for build environment
 # - name: Nodejs specific tasks
@@ -113,7 +100,8 @@
     cmd: |
       #! /usr/bin/env bash
       set -o pipefail
-      {{ rtx_binary_installation_path }}/rtx install {{ item.0.name }}@{{ item.1 }}
+      export RTX_DATA_DIR={{ rtx_data_dir }}
+      {{ rtx_binary_installation_path }} install {{ item.0.name }}@{{ item.1 }}
   args:
     creates: "{{ rtx_data_dir }}/installs/{{ item.0.name }}/{{ item.1 }}"
   with_subelements:
@@ -131,7 +119,8 @@
     cmd: |
       #! /usr/bin/env bash
       set -o pipefail
-      {{ rtx_binary_installation_path }}/rtx uninstall {{ item.0.name }}@{{ item.1 }}
+      export RTX_DATA_DIR={{ rtx_data_dir }}
+      {{ rtx_binary_installation_path }} uninstall {{ item.0.name }}@{{ item.1 }}
   args:
     removes: "{{ rtx_data_dir }}/installs/{{ item.0.name }}/{{ item.1 }}"
   with_subelements:
@@ -149,18 +138,13 @@
     cmd: |
       #! /usr/bin/env bash
       set -o pipefail
-      {{ rtx_binary_installation_path }}/rtx global {{ item.name }}@{{ item.global | default(item.versions | difference(item.delete_versions|default([])) | sort | first) }}
+      export KERL_BUILD_DOCS=no
+      export KERL_INSTALL_HTMLDOCS=no
+      export KERL_INSTALL_MANPAGES=no
+      export RTX_DATA_DIR={{ rtx_data_dir }}
+      {{ rtx_binary_installation_path }} global {{ item.name }}@{{ item.global | default(item.versions | difference(item.delete_versions|default([])) | sort | first) }}
   when: item.versions is defined
   with_items: "{{ rtx_plugins }}"
   become: true
   become_user: "{{ ansible_user }}"
   changed_when: false
-
-# - name: Set group permissions
-#   become: true
-#   ansible.builtin.file:
-#     path: "{{ rtx_dir }}"
-#     owner: "{{ rtx_user }}"
-#     group: "{{ rtx_group }}"
-#     state: directory
-#     recurse: true

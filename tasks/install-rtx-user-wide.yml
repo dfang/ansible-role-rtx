@@ -1,10 +1,16 @@
 ---
-# - name: Remove /etc/profile.d/rtx.sh if exists
-#   ansible.builtin.file:
-#     path: /etc/profile.d/rtx.sh
-#     state: absent
-#   become: true
-#   when: system_wide is false
+- name: Remove /etc/profile.d/rtx.sh if exists in user_wide mode
+  ansible.builtin.file:
+    path: /etc/profile.d/rtx.sh
+    state: absent
+  become: true
+  when: system_wide is false
+
+- name: Remove /usr/local/bin/rtx if exists in user_wide mode
+  ansible.builtin.file:
+    path: "/usr/local/bin/rtx"
+    state: absent
+  become: true
 
 # - name: Get user home directory
 #   ansible.builtin.shell:
@@ -16,36 +22,34 @@
 #   changed_when: false
 #   register: user_home
 
-- name: Update bashrc
-  ansible.builtin.lineinfile:
-    dest: "$HOME/.bashrc"
-    create: true
-    mode: "0644"
-    line: export RTX_DATA_DIR=$HOME/.local/share/rtx
-    regexp: ^export RTX_DATA_DIR=$HOME/.local/share/rtx
+# - name: Update bashrc
+#   ansible.builtin.lineinfile:
+#     dest: "$HOME/.bashrc"
+#     create: true
+#     mode: "0644"
+#     line: export RTX_DATA_DIR=$HOME/.local/share/rtx
+#     regexp: ^export RTX_DATA_DIR=$HOME/.local/share/rtx
 
-- name: Update bashrc
-  ansible.builtin.lineinfile:
-    dest: "$HOME/.bashrc"
-    create: true
-    mode: "0644"
-    line: eval "$(~/bin/rtx activate bash)"
-    regexp: ^eval "$(~/bin/rtx activate bash)"
+# - name: Update bashrc
+#   ansible.builtin.lineinfile:
+#     dest: "$HOME/.bashrc"
+#     create: true
+#     mode: "0644"
+#     line: eval "$(~/bin/rtx activate bash)"
+#     regexp: ^eval "$(~/bin/rtx activate bash)"
 
-- name: Source bashrc
+- name: Update and Source bashrc
   ansible.builtin.shell:
     executable: "{{ bash_executable_path }}"
     cmd: |
       #! /usr/bin/env bash
       set -o pipefail
+      LINE='eval "$(~/bin/rtx activate bash)"'
+      grep -qF -- "$LINE" "$HOME/.bashrc" || echo "$LINE" >> "$HOME/.bashrc"
       source $HOME/.bashrc
       echo bashrc sourced
   changed_when: false
-
-# - name: Set rtx_dir variable based on home directory
-#   ansible.builtin.set_fact:
-#     rtx_dir: "$HOME/.local/share/rtx/"
-#   when: rtx_dir is undefined and system_wide is false
+  become_user: "{{ ansible_user }}"
 
 - name: Ensure RTX_DATA_DIR presence and ownership
   ansible.builtin.file:
@@ -54,26 +58,3 @@
     # group: "{{ rtx_group }}"
     state: directory
     mode: "0755"
-
-# # - name: set facts
-# #   set_fact:
-# #     cpu_type: 'x64'
-# #     when: ansible_architecture == "x86_64"
-
-# # - name: Install rtx binary
-# #   ansible.builtin.get_url:
-# #     # https://github.com/jdxcode/rtx/releases/download/v1.30.4/rtx-v1.30.4-linux-arm64
-# #     url: https://ghproxy.com/https://github.com/jdxcode/rtx/releases/download/{{ rtx_version }}/rtx-{{ rtx_version }}-{{ ansible_system }}-x64
-# #     dest: /usr/local/bin/rtx
-# #     mode: "755"
-
-# - name: Debug output
-#   ansible.builtin.debug:
-#     var: user_home
-
-# - name: Run rtx version
-#   ansible.builtin.shell: rtx version
-#   register: rtx_version_output
-
-# - name: Output rtx version
-#   debug: var=rtx_version_output.stdout_lines
