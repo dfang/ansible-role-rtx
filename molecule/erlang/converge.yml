@@ -14,8 +14,3 @@
           - name: elixir
             versions: ["1.15.2-otp-26"]
             global: 1.15.2-otp-26
-    # - role: ansible-role-rtx
-    #   rtx_plugins:
-    #     - name: "nodejs"
-    #       versions: ["16.14.0"]
-    #       global: "16.14.0"

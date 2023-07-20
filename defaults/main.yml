@@ -16,6 +16,7 @@ rtx_version: v1.34.1
 # export RTX_DATA_DIR=$HOME/.local/share/rtx
 # eval "$(rtx activate bash)"
 system_wide: false
+# rtx_data_dir: "~/.local/share/rtx"
 
 # by default, no plugins and apps installed, you have to pass vars to role like this
 # rtx_plugins:
@@ -25,14 +26,13 @@ system_wide: false
 #     delete_versions: []
 #     global: 20.1
 rtx_plugins: []
-
 apt_cache_valid_time: 86400
 remote_package_retries: 5
 
-rtx_python_repository: "https://github.com/rtx-plugins/rtx-python"
-rtx_nodejs_repository: "https://github.com/rtx-plugins/rtx-nodejs"
-rtx_node_repository: "https://github.com/rtx-plugins/rtx-nodejs"
-rtx_golang_repository: "https://github.com/rtx-plugins/rtx-golang"
-rtx_go_repository: "https://github.com/rtx-plugins/rtx-golang"
-rtx_ruby_repository: "https://github.com/rtx-plugins/rtx-ruby"
-rtx_java_repository: "https://github.com/rtx-plugins/rtx-java"
+rtx_python_repository: https://github.com/rtx-plugins/rtx-python
+rtx_nodejs_repository: https://github.com/rtx-plugins/rtx-nodejs
+rtx_node_repository: https://github.com/rtx-plugins/rtx-nodejs
+rtx_golang_repository: https://github.com/rtx-plugins/rtx-golang
+rtx_go_repository: https://github.com/rtx-plugins/rtx-golang
+rtx_ruby_repository: https://github.com/rtx-plugins/rtx-ruby
+rtx_java_repository: https://github.com/rtx-plugins/rtx-java

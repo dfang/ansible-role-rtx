@@ -1,12 +1,27 @@
 ---
-- name: Ensure rtx_binary_installation_dir presence and ownership
+- name: Ensure rtx_data_dir {{ rtx_data_dir }}
+  ansible.builtin.file:
+    path: "{{ rtx_data_dir }}"
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    recurse: true
+    state: directory
+    mode: "0755"
+  become_user: root
+  become: true
+
+- name: Ensure rtx_binary_installation_dir {{ rtx_binary_installation_dir }}
   ansible.builtin.file:
     path: "{{ rtx_binary_installation_dir }}"
     owner: "{{ ansible_user }}"
     group: "{{ ansible_user }}"
     state: directory
     mode: "0755"
-  become: true
+
+- name: Print rtx_binary_installation_path
+  ansible.builtin.debug:
+    var: rtx_binary_installation_path
+    # verbosity: 3
 
 - name: Install rtx binary to {{ rtx_binary_installation_dir }}
   ansible.builtin.get_url:
@@ -15,10 +30,10 @@
     dest: "{{ rtx_binary_installation_path }}"
     mode: "755"
 
-- name: Install rtx system wide
-  ansible.builtin.import_tasks: install-rtx-system-wide.yml
-  when: system_wide is true
+- name: Include rtx system wide task
+  ansible.builtin.include_tasks: install-rtx-system-wide.yml
+  when: system_wide | bool
 
-- name: Install rtx user wide
-  ansible.builtin.import_tasks: install-rtx-user-wide.yml
-  when: system_wide is false
+- name: Include rtx user wide task
+  ansible.builtin.include_tasks: install-rtx-user-wide.yml
+  when: not (system_wide | bool)

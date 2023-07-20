@@ -1,11 +1,12 @@
+---
 # set facts
 - name: Determine Bash executable path
   ansible.builtin.command:
-    cmd: "which bash"
+    cmd: which bash
   register: bash_path_result
   changed_when: false
 
-- name: "Set fact for bash_executable_path"
+- name: Set fact for bash_executable_path
   ansible.builtin.set_fact:
     bash_executable_path: "{{ bash_path_result.stdout }}"
   when: bash_executable_path is not defined
@@ -13,18 +14,18 @@
 - name: Print bash_executable_path
   ansible.builtin.debug:
     var: bash_executable_path
-    verbosity: 3
+    # verbosity: 3
 
 # https://stackoverflow.com/a/42938544
-- name: "Set fact for rtx_binary_installation_dir"
+- name: Set fact for rtx_binary_installation_dir
   ansible.builtin.set_fact:
-    rtx_binary_installation_dir: "{{ '/usr/local/bin' if system_wide else '$HOME/bin' }}"
+    rtx_binary_installation_dir: "{{ '/usr/local/bin' if (system_wide | bool) else (ansible_env.HOME, 'bin') | path_join }}"
   when: rtx_binary_installation_dir is not defined
 
 - name: Print rtx_binary_installation_dir
   ansible.builtin.debug:
     var: rtx_binary_installation_dir
-    verbosity: 3
+    # verbosity: 3
 
 - name: Set fact for rtx_binary_installation_path
   ansible.builtin.set_fact:
@@ -33,29 +34,34 @@
 - name: Print rtx_binary_installation_path
   ansible.builtin.debug:
     var: rtx_binary_installation_path
-    verbosity: 3
+    # verbosity: 3
 
 # https://github.com/jdxcode/rtx/tree/v1.34.1#rtx_data_dir
-- name: Set RTX_DATA_DIR to /opt/rtx when system_wide is true
+- name: Set RTX_DATA_DIR to {{ rtx_data_dir }}
   ansible.builtin.set_fact:
     rtx_data_dir: /opt/rtx
-  when: system_wide is true
+  when: (system_wide | bool)
 
-- name: Set RTX_DATA_DIR to ~/.local/share/rtx when system_wide is false
+- name: Set RTX_DATA_DIR to {{ rtx_data_dir }}
   ansible.builtin.set_fact:
     rtx_data_dir: ~/.local/share/rtx
-  when: system_wide is false
+  when: not (system_wide | bool)
 
 - name: Print system_wide
   ansible.builtin.debug:
     var: system_wide
-    verbosity: 3
+    # verbosity: 3
 
-- name: Print rtx related environment variables
+- name: Print rtx_data_dir
   ansible.builtin.debug:
-    msg:
-      - "{{ lookup('ansible.builtin.env', 'RTX_DATA_DIR') }}"
-    verbosity: 3
+    var: rtx_data_dir
+    # verbosity: 3
+
+# - name: Print rtx related environment variables
+#   ansible.builtin.debug:
+#     msg:
+#       - "{{ lookup('ansible.builtin.env', 'RTX_DATA_DIR') }}"
+#   verbosity: 3
 
 - name: "Extract name into a list and register variable plugins_to_install from vars: rtx_plugins"
   ansible.builtin.set_fact:
@@ -64,8 +70,7 @@
 - name: Print rtx_plugins
   ansible.builtin.debug:
     var: rtx_plugins
-    verbosity: 3
-
+    # verbosity: 3
 
 - name: Set supported_plugins
   ansible.builtin.set_fact:
@@ -78,6 +83,11 @@
       - elixir
       - java
       - php
+
+- name: Print supported_plugins
+  ansible.builtin.debug:
+    var: supported_plugins
+    # verbosity: 3
 
 # FIXME: Invalid data passed to 'loop', it requires a list
 # - name: Set dynamic variable like rtx_apt_{{ item }}_dependencies

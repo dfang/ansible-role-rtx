@@ -9,7 +9,7 @@
       - "ansible_distribution_version: {{ ansible_distribution_version }}"
       - "ansible_pkg_mgr: {{ ansible_pkg_mgr }}"
       - "ansible_user: {{ ansible_user }}"
-      
+
 - name: Set facts
   ansible.builtin.import_tasks: set-facts.yml
 

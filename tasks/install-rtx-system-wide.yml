@@ -1,7 +1,7 @@
 ---
 - name: Remove ~/bin/rtx if exists in system_wide mode
   ansible.builtin.file:
-    path: "$HOME/bin/rtx"
+    path: $HOME/bin/rtx
     state: absent
 
 # - name: Delete line from ~/.bashrc
@@ -16,17 +16,9 @@
 
 - name: Replace between the expressions (requires Ansible >= 2.4)
   ansible.builtin.replace:
-    path: "$HOME/.bashrc"
-    regexp: '^(eval.+rtx activate.+bash*)'
-    replace: '# \1'
-
-- name: Ensure RTX_DATA_DIR presence and ownership
-  ansible.builtin.file:
-    path: "{{ rtx_data_dir }}"
-    owner: "{{ ansible_user }}"
-    # group: "{{ rtx_group }}"
-    state: directory
-    mode: "0755"
+    path: $HOME/.bashrc
+    regexp: ^(eval.+rtx activate.+bash*)
+    replace: "# \\1"
 
 - name: Source rtx script
   ansible.builtin.template:

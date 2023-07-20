@@ -18,6 +18,7 @@
     update_cache: true
     cache_valid_time: 3600
   changed_when: false
+  become: true
   when: ansible_os_family == "Debian"
 
 # - name: Update package cache (yum/CentOS)
@@ -25,6 +26,7 @@
 #   yum:
 #     update_cache: yes
 #   changed_when: false
+#   become: true
 #   when: ansible_os_family == "RedHat"
 
 - name: Update package cache using dnf (CentOS8/Fedora/RockyLinux)
@@ -32,6 +34,7 @@
   ansible.builtin.dnf:
     update_cache: true
   changed_when: false
+  become: true
   when: ansible_pkg_mgr == "dnf"
 
 - name: Update package cache using yum (AmazonLinux2)
@@ -39,4 +42,5 @@
   ansible.builtin.yum:
     update_cache: true
   changed_when: false
+  become: true
   when: ansible_distribution == "Amazon"
