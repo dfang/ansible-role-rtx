@@ -26,6 +26,7 @@
 - name: Install global dependencies
   ansible.builtin.import_tasks: install-plugin-global-dependencies.yml
   tags:
+    - package-cache
     - plugin-dependencies
 
 - name: Install plugin specific dependencies
