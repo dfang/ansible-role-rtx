@@ -1,9 +1,17 @@
 ---
-- name: Install rtx binary to rtx_binary_installation_path
+- name: Ensure rtx_binary_installation_dir presence and ownership
+  ansible.builtin.file:
+    path: "{{ rtx_binary_installation_dir }}"
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    state: directory
+    mode: "0755"
+  become: true
+
+- name: Install rtx binary to {{ rtx_binary_installation_dir }}
   ansible.builtin.get_url:
     # https://github.com/jdxcode/rtx/releases/download/v1.30.4/rtx-v1.30.4-linux-arm64
     url: "{{ rtx_download_url }}"
-    # dest: /usr/local/bin/rtx
     dest: "{{ rtx_binary_installation_path }}"
     mode: "755"
 
@@ -14,73 +22,3 @@
 - name: Install rtx user wide
   ansible.builtin.import_tasks: install-rtx-user-wide.yml
   when: system_wide is false
-
-# # 
-# # Set rtx_dir
-# # 
-# - name: Set rtx_dir to /opt/rtx when system_wide is true
-#   ansible.builtin.set_fact:
-#     rtx_dir: "/opt/rtx"
-#   when: system_wide is true
-
-# - name: Get users HOME
-#   ansible.builtin.getent:
-#     database: passwd
-#     key: "{{ rtx_user }}"
-#     split: ":"
-#   when: rtx_dir is undefined and system_wide is false
-
-# - name: Set rtx_dir variable based on home directory
-#   ansible.builtin.set_fact:
-#     rtx_dir: "{{ getent_passwd[rtx_user][4] }}/.local/share/bin/"
-#   when: rtx_dir is undefined and system_wide is false
-
-# - name: Ensure rtx_dir presence and ownership
-#   ansible.builtin.file:
-#     path: "{{ rtx_dir }}"
-#     owner: "{{ rtx_user }}"
-#     group: "{{ rtx_group }}"
-#     state: directory
-#     mode: "0755"
-
-# # - name: set facts
-# #   set_fact:
-# #     cpu_type: 'x64'
-# #     when: ansible_architecture == "x86_64"
-
-# - name: Get user home directory
-#   ansible.builtin.shell: |
-#     #! /usr/bin/env bash
-#     set -o pipefail
-#     getent passwd {{ rtx_user }}  | awk -F: '{ print $6 }'
-#   changed_when: false
-#   register: user_home
-
-# - name: Debug output
-#   ansible.builtin.debug:
-#     var: user_home.stdout
-
-# # - name: Update bashrc
-# #   lineinfile:
-# #     dest: "{{user_home.stdout}}/.bashrc"
-# #     create: yes
-# #     mode: 0644
-# #     line: 'eval "$(rtx activate bash)"'
-# #     regexp: '^eval "$(rtx activate bash)"'
-
-# - name: Source rtx script
-#   ansible.builtin.template:
-#     src: rtx.sh.j2
-#     dest: /etc/profile.d/rtx.sh
-#     owner: root
-#     group: root
-#     mode: "0755"
-#   become: true
-
-# # - name: Source bashrc
-# #   shell: source {{user_home.stdout}}/.bashrc && echo bashrc sourced
-# #   # args:
-# #   #    executable: /bin/bash
-
-# # - name: Ensure
-# #   shell: rtx version

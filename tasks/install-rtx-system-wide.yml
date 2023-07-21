@@ -1,17 +1,30 @@
 ---
-# 
-# Set rtx_dir
-# 
-- name: Set rtx_dir to /opt/rtx when system_wide is true
-  ansible.builtin.set_fact:
-    rtx_dir: /opt/rtx
-  when: system_wide is true
-
-- name: Ensure rtx_dir presence and ownership
+- name: Remove ~/bin/rtx if exists in system_wide mode
   ansible.builtin.file:
-    path: "{{ rtx_dir }}"
-    owner: "{{ rtx_user }}"
-    group: "{{ rtx_group }}"
+    path: "$HOME/bin/rtx"
+    state: absent
+
+# - name: Delete line from ~/.bashrc
+#   ansible.builtin.lineinfile:
+#     dest: "/home/deploy/.bashrc"
+#     mode: "0644"
+#     # line: '# eval "$(~/bin/rtx activate bash)"'
+#     # regexp: '^eval "$(~/bin/rtx activate bash)"'
+#     regexp: '^eval.+rtx activate.+bash\)'
+#     state: absent
+#     # backup: yes
+
+- name: Replace between the expressions (requires Ansible >= 2.4)
+  ansible.builtin.replace:
+    path: "$HOME/.bashrc"
+    regexp: '^(eval.+rtx activate.+bash*)'
+    replace: '# \1'
+
+- name: Ensure RTX_DATA_DIR presence and ownership
+  ansible.builtin.file:
+    path: "{{ rtx_data_dir }}"
+    owner: "{{ ansible_user }}"
+    # group: "{{ rtx_group }}"
     state: directory
     mode: "0755"
 

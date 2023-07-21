@@ -1,0 +1,97 @@
+---
+# - name: "Install {{ item }} dependencies with apt"
+#   ansible.builtin.apt:
+#     # name: "{{ rtx_apt_{{ item }}_dependencies }}"
+#     name: "{{ 'rtx_apt_' + item + '_dependencies' }}"
+#     install_recommends: false
+#     cache_valid_time: "{{ apt_cache_valid_time }}"
+#   retries: "{{ remote_package_retries }}"
+#   register: "{{ 'apt_' + item + '_result' }}"
+#   until: "{{ 'apt_' + item '_result' }} is succeeded"
+#   become: true
+#   loop:
+#     - nodejs
+#     - python
+#     - golang
+#     - erlang
+#     - elixir
+#     - ruby
+#     - java
+#     - php
+#   when: ansible_os_family == "Debian" and item in plugins_to_install
+
+- name: "Install {{ item }} dependencies with apt"
+  ansible.builtin.apt:
+    name: "{{ vars['rtx_apt_' + item + '_dependencies'] }}"
+    install_recommends: false
+    cache_valid_time: "{{ apt_cache_valid_time }}"
+  retries: "{{ remote_package_retries }}"
+  register: apt_result
+  until: apt_result is succeeded
+  become: true
+  loop:
+    - golang
+    - nodejs
+    - python
+    - ruby
+    - erlang
+    - elixir
+    - java
+    - php
+  when: ansible_os_family == "Debian" and item in plugins_to_install
+
+
+# - name: Install erlang dependencies with yum
+#   ansible.builtin.yum:
+#     name: "{{ rtx_yum_erlang_dependencies }}"
+#   retries: "{{ remote_package_retries }}"
+#   register: yum_erlang_result
+#   until: yum_erlang_result is succeeded
+#   become: true
+#   when: ansible_os_family == "RedHat"
+
+
+# - name: Specific tasks for {{ item }}
+#   ansible.builtin.include_tasks: 
+#     file: plugins/plugin.yml
+#   loop:
+#     - nodejs
+#     - python
+#     - golang
+#     - ruby
+#     - erlang
+#     - elixir
+#     - ruby
+#     - java
+#     - php
+#   when: item in plugins_to_install
+
+
+# - name: Install {{ plugin }} dependencies using apt (Ubuntu/Debian)
+#   tags: always
+#   ansible.builtin.apt:
+#     update_cache: true
+#     cache_valid_time: 3600
+#   changed_when: false
+#   when: ansible_os_family == "Debian"
+
+# # - name: Install {{ plugin }} dependencies (yum/CentOS)
+# #   tags: always
+# #   yum:
+# #     update_cache: yes
+# #   changed_when: false
+# #   when: ansible_os_family == "RedHat"
+
+# - name: Install {{ plugin }} dependencies using dnf (CentOS8/Fedora/RockyLinux)
+#   tags: always
+#   ansible.builtin.dnf:
+#     update_cache: true
+#   changed_when: false
+#   when: ansible_pkg_mgr == "dnf"
+
+# - name: Install {{ plugin }} dependencies using yum (AmazonLinux2)
+#   tags: always
+#   ansible.builtin.yum:
+#     update_cache: true
+#   changed_when: false
+#   when: ansible_distribution == "Amazon"

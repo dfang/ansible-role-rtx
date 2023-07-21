@@ -1,12 +1,10 @@
 ---
-rtx_download_url: https://ghproxy.com/https://github.com/jdxcode/rtx/releases/download/{{ rtx_version }}/rtx-{{ rtx_version }}-{{ ansible_system }}-x64
+rtx_download_url: https://github.com/jdxcode/rtx/releases/download/{{ rtx_version }}/rtx-{{ rtx_version }}-{{ ansible_system }}-x64
 rtx_version: v1.34.1
-rtx_user: root
-rtx_group: root
 
 # 
-# rtx binary will always install to /user/local/bin
-# rtx will install plugins and apps, downloads to RTX_DATA_DIR
+# rtx binary will installed to rtx_binary_installation_path(set_facts.yml)
+# rtx will install plugins and apps, downloads to RTX_DATA_DIR(set_facts.yml)
 # 
 # if system_wide: true, /etc/profile.d/rtx.sh will created with content
 # if [ -f "/usr/local/bin/rtx" ]; then
@@ -18,13 +16,10 @@ rtx_group: root
 # export RTX_DATA_DIR=$HOME/.local/share/rtx
 # eval "$(rtx activate bash)"
 system_wide: false
-# determined in tasks/set-facts.yml
-# rtx_binary_installation_path: /usr/local/bin/rtx
 
 # by default, no plugins and apps installed, you have to pass vars to role like this
 # rtx_plugins:
 #   - name: erlang
-#     repository: ""
 #     versions:
 #       - 20.1
 #     delete_versions: []

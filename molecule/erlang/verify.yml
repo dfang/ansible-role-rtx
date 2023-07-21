@@ -1,0 +1,54 @@
+---
+- name: Verify
+  hosts: all
+  gather_facts: false
+  tasks:
+    # - name: Example assertion
+    #   ansible.builtin.assert:
+    #     that: 
+    #       - ansible_host is defined
+
+    # - name: Populate service facts
+    #   ansible.builtin.service_facts:
+
+    # - name: Print service facts
+    #   ansible.builtin.debug:
+    #     var: ansible_facts.services
+
+    # - name: Populate rtx version
+    #   ansible.builtin.command: rtx version
+    #   register: rtx_version
+
+    # - name: Print rtx version
+    #   ansible.builtin.debug:
+    #     var: rtx_version.stdout
+
+    - name: Populate erlang version
+      ansible.builtin.shell: |
+        /root/.local/share/rtx/installs/erlang/26.0.2/bin/erl -eval 'erlang:display(erlang:system_info(otp_release)), halt().'  -noshell
+      args:
+        executable: /bin/bash
+      register: erlang_version
+      changed_when: false
+
+    - name: Print erlang version
+      ansible.builtin.debug:
+        var: erlang_version.stdout
+
+    - name: Assert erlang version
+      ansible.builtin.assert:
+        that: "'26' in erlang_version.stdout"
+
+    - name: Populate elixir version
+      ansible.builtin.shell: |
+        /root/.local/share/rtx/installs/elixir/1.15.2-otp-26/bin/elixir --short-version
+      register: elixir_version
+      changed_when: false
+
+    - name: Print elixir version
+      ansible.builtin.debug:
+        var: elixir_version.stdout
+
+    - name: Assert elixir version
+      ansible.builtin.assert:
+        that: "'1.15.2' in elixir_version.stdout"

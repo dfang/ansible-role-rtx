@@ -13,8 +13,10 @@ exclude_paths:
   - ./requirements.yml
 
 skip_list:
-  - yaml[truthy]
+  # - yaml[truthy]
   - var-naming[no-role-prefix]
+  - name[template]
+  - var-naming[no-jinja]
 
 # enable_list:
 #   - name[prefix]

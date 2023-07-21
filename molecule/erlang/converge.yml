@@ -1,0 +1,21 @@
+---
+- name: Converge
+  hosts: all
+  tasks:
+    - name: Include ansible-role-rtx
+      ansible.builtin.include_role:
+        name: ansible-role-rtx
+      vars:
+        ansible_user: root
+        rtx_plugins:
+          - name: erlang
+            versions: ["26.0.2"]
+            global: 26.0.2
+          - name: elixir
+            versions: ["1.15.2-otp-26"]
+            global: 1.15.2-otp-26
+    # - role: ansible-role-rtx
+    #   rtx_plugins:
+    #     - name: "nodejs"
+    #       versions: ["16.14.0"]
+    #       global: "16.14.0"
