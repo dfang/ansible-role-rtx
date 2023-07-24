@@ -18,6 +18,7 @@ rtx_version: v1.34.1
 system_wide: false
 # rtx_data_dir: "~/.local/share/rtx"
 
+
 # by default, no plugins and apps installed, you have to pass vars to role like this
 # rtx_plugins:
 #   - name: erlang

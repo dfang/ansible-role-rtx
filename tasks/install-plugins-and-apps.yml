@@ -135,6 +135,7 @@
     removes: "{{ rtx_data_dir }}/installs/{{ item.0.name }}/{{ item.1 }}"
   environment:
     RTX_DATA_DIR: "{{ rtx_data_dir }}"
+
   with_subelements:
     - "{{ rtx_plugins }}"
     - delete_versions

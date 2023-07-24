@@ -20,7 +20,7 @@
 #     - php
 #   when: ansible_os_family == "Debian" and item in plugins_to_install
 
-- name: Install {{ item }} dependencies with apt
+- name: "Install {{ item }} dependencies with apt"
   ansible.builtin.apt:
     name: "{{ vars['rtx_apt_' + item + '_dependencies'] }}"
     install_recommends: false

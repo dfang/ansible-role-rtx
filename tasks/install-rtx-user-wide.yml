@@ -7,7 +7,7 @@
 
 - name: Remove /usr/local/bin/rtx if exists in user_wide mode
   ansible.builtin.file:
-    path: /usr/local/bin/rtx
+    path: "/usr/local/bin/rtx"
     state: absent
   become: true
 
@@ -49,3 +49,4 @@
       echo bashrc sourced
   changed_when: false
   become_user: "{{ ansible_user }}"
+
