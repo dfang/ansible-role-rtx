@@ -42,9 +42,15 @@
     cmd: |
       #! /usr/bin/env bash
       set -o pipefail
-      {{ rtx_binary_installation_path }} plugins add {{ item.name }} {{ item.repository | default(lookup('ansible.builtin.vars', 'rtx_' + item.name + '_repository', default='')) }}
+      export RTX_EXPERIMENTAL=1
+      export RTX_ALWAYS_KEEP_DOWNLOAD=1
+      RTX_DEBUG=1 {{ rtx_binary_installation_path }} plugins add {{ item.name }} {{ item.repository | default(lookup('ansible.builtin.vars', 'rtx_' + item.name + '_repository', default='')) }}
   args:
     creates: "{{ rtx_data_dir }}/plugins/{{ item.name }}"
+  environment:
+    RTX_DATA_DIR: "{{ rtx_data_dir | default(omit) }}"
+    http_proxy: "{{ http_proxy | default(omit) }}"
+    https_proxy: "{{ http_proxy | default(omit) }}"
   with_items: "{{ rtx_plugins }}"
   when: rtx_plugins | length > 0
   become: true
@@ -100,18 +106,23 @@
     cmd: |
       #! /usr/bin/env bash
       set -o pipefail
-      export RTX_DATA_DIR={{ rtx_data_dir }}
+      export RTX_EXPERIMENTAL=1
+      export RTX_ALWAYS_KEEP_DOWNLOAD=1
       {{ rtx_binary_installation_path }} install {{ item.0.name }}@{{ item.1 }}
   args:
     creates: "{{ rtx_data_dir }}/installs/{{ item.0.name }}/{{ item.1 }}"
+  environment:
+    RTX_DATA_DIR: "{{ rtx_data_dir | default(omit) }}"
+    http_proxy: "{{ http_proxy | default(omit) }}"
+    https_proxy: "{{ http_proxy | default(omit) }}"
   with_subelements:
     - "{{ rtx_plugins }}"
     - versions
     - flags:
       skip_missing: true
   when: rtx_plugins | length > 0
-  become: true
-  become_user: "{{ ansible_user }}"
+  # become: true
+  # become_user: "{{ ansible_user }}"
 
 - name: Uninstall apps
   ansible.builtin.shell:
@@ -119,18 +130,20 @@
     cmd: |
       #! /usr/bin/env bash
       set -o pipefail
-      export RTX_DATA_DIR={{ rtx_data_dir }}
       {{ rtx_binary_installation_path }} uninstall {{ item.0.name }}@{{ item.1 }}
   args:
     removes: "{{ rtx_data_dir }}/installs/{{ item.0.name }}/{{ item.1 }}"
+  environment:
+    RTX_DATA_DIR: "{{ rtx_data_dir }}"
+
   with_subelements:
     - "{{ rtx_plugins }}"
     - delete_versions
     - flags:
       skip_missing: true
   when: rtx_plugins | length > 0
-  become: true
-  become_user: "{{ ansible_user }}"
+  # become: true
+  # become_user: "{{ ansible_user }}"
 
 - name: Set global app versions
   ansible.builtin.shell:
@@ -145,6 +158,6 @@
       {{ rtx_binary_installation_path }} global {{ item.name }}@{{ item.global | default(item.versions | difference(item.delete_versions|default([])) | sort | first) }}
   when: item.versions is defined
   with_items: "{{ rtx_plugins }}"
-  become: true
-  become_user: "{{ ansible_user }}"
+  # become: true
+  # become_user: "{{ ansible_user }}"
   changed_when: false

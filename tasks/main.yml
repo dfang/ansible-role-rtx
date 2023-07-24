@@ -9,21 +9,32 @@
       - "ansible_distribution_version: {{ ansible_distribution_version }}"
       - "ansible_pkg_mgr: {{ ansible_pkg_mgr }}"
       - "ansible_user: {{ ansible_user }}"
-      
+
 - name: Set facts
   ansible.builtin.import_tasks: set-facts.yml
 
 - name: Install rtx
   ansible.builtin.import_tasks: install-rtx.yml
+  tags:
+    - rtx-binary
 
 - name: Update package cache
   ansible.builtin.import_tasks: update-package-cache.yml
+  tags:
+    - plugin-dependencies
 
 - name: Install global dependencies
   ansible.builtin.import_tasks: install-plugin-global-dependencies.yml
+  tags:
+    - package-cache
+    - plugin-dependencies
 
 - name: Install plugin specific dependencies
   ansible.builtin.import_tasks: install-plugin-specific-dependencies.yml
+  tags:
+    - plugin-dependencies
 
 - name: Install plugins and apps
   ansible.builtin.import_tasks: install-plugins-and-apps.yml
+  tags:
+    - rtx-apps

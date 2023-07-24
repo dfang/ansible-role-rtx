@@ -1,3 +1,4 @@
+---
 # set facts
 - name: Determine Bash executable path
   ansible.builtin.command:
@@ -36,15 +37,15 @@
     verbosity: 3
 
 # https://github.com/jdxcode/rtx/tree/v1.34.1#rtx_data_dir
-- name: Set RTX_DATA_DIR to /opt/rtx when system_wide is true
+- name: Set RTX_DATA_DIR to {{ rtx_data_dir }}
   ansible.builtin.set_fact:
     rtx_data_dir: /opt/rtx
-  when: system_wide is true
+  when: (system_wide | bool)
 
-- name: Set RTX_DATA_DIR to ~/.local/share/rtx when system_wide is false
+- name: Set RTX_DATA_DIR to {{ rtx_data_dir }}
   ansible.builtin.set_fact:
     rtx_data_dir: ~/.local/share/rtx
-  when: system_wide is false
+  when: not (system_wide | bool)
 
 - name: Print system_wide
   ansible.builtin.debug:
@@ -66,7 +67,6 @@
     var: rtx_plugins
     verbosity: 3
 
-
 - name: Set supported_plugins
   ansible.builtin.set_fact:
     supported_plugins:
@@ -78,6 +78,11 @@
       - elixir
       - java
       - php
+
+- name: Print supported_plugins
+  ansible.builtin.debug:
+    var: supported_plugins
+    # verbosity: 3
 
 # FIXME: Invalid data passed to 'loop', it requires a list
 # - name: Set dynamic variable like rtx_apt_{{ item }}_dependencies

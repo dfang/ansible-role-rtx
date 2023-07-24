@@ -4,7 +4,6 @@
     path: /etc/profile.d/rtx.sh
     state: absent
   become: true
-  when: system_wide is false
 
 - name: Remove /usr/local/bin/rtx if exists in user_wide mode
   ansible.builtin.file:
@@ -51,10 +50,3 @@
   changed_when: false
   become_user: "{{ ansible_user }}"
 
-- name: Ensure RTX_DATA_DIR presence and ownership
-  ansible.builtin.file:
-    path: "{{ rtx_data_dir }}"
-    owner: "{{ ansible_user }}"
-    # group: "{{ rtx_group }}"
-    state: directory
-    mode: "0755"

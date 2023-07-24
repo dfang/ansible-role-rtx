@@ -97,6 +97,7 @@ jobs:
           python3 -m pip install pdm==2.7.4
           pdm -V
           pdm sync
+          pdm config check_update false
       - name: Test with molecule
         run: |
           eval $(pdm venv activate)

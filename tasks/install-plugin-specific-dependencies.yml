@@ -53,5 +53,5 @@
 #   when: item in plugins_to_install
 
 - name: Include plugin dependencies task
-  ansible.builtin.include_tasks: 
+  ansible.builtin.include_tasks:
     file: plugins/plugin.yml
