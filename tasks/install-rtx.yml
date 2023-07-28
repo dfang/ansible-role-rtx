@@ -21,7 +21,7 @@
 - name: Print rtx_binary_installation_path
   ansible.builtin.debug:
     var: rtx_binary_installation_path
-    verbosity: 3
+    # verbosity: 3
 
 - name: Install rtx binary to {{ rtx_binary_installation_dir }}
   ansible.builtin.get_url:
@@ -29,6 +29,14 @@
     url: "{{ rtx_download_url }}"
     dest: "{{ rtx_binary_installation_path }}"
     mode: "755"
+    use_proxy: "{{ https_proxy is defined | default(false) }}"
+    timeout: 10 # default 10 seconds
+  register: get_url_result
+  retries: 5
+  until: get_url_result is succeeded
+  environment:
+    http_proxy: "{{ http_proxy | default(omit) }}"
+    https_proxy: "{{ https_proxy | default(omit) }}"
 
 - name: Include rtx system wide task
   ansible.builtin.include_tasks: install-rtx-system-wide.yml
