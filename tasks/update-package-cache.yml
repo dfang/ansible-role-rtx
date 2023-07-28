@@ -13,7 +13,6 @@
 # | amazonlinux2             | Amazon               | RedHat            | yum             |
 
 - name: Update package cache using apt (Ubuntu/Debian)
-  tags: always
   ansible.builtin.apt:
     update_cache: true
     cache_valid_time: 3600
@@ -30,7 +29,6 @@
 #   when: ansible_os_family == "RedHat"
 
 - name: Update package cache using dnf (CentOS8/Fedora/RockyLinux)
-  tags: always
   ansible.builtin.dnf:
     update_cache: true
   changed_when: false
@@ -38,7 +36,6 @@
   when: ansible_pkg_mgr == "dnf"
 
 - name: Update package cache using yum (AmazonLinux2)
-  tags: always
   ansible.builtin.yum:
     update_cache: true
   changed_when: false

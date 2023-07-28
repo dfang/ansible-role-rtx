@@ -9,9 +9,30 @@
       - "ansible_distribution_version: {{ ansible_distribution_version }}"
       - "ansible_pkg_mgr: {{ ansible_pkg_mgr }}"
       - "ansible_user: {{ ansible_user }}"
+  tags:
+    - always
+
+# - set_fact:
+#     ansible_ssh_user: "{{ lookup('env', 'SSH_USER') | default('deploy', true) }}"
+#     http_proxy: "{{ http_proxy | default(omit) }}"
+#     https_proxy: "{{ https_proxy | default(omit) }}"
+#   tags:
+#     - always
+
+# - debug:
+#     var: http_proxy
+#   tags:
+#     - always
+
+# - debug:
+#     var: https_proxy
+#   tags:
+#     - always
 
 - name: Set facts
   ansible.builtin.import_tasks: set-facts.yml
+  tags:
+    - always
 
 - name: Install rtx
   ansible.builtin.import_tasks: install-rtx.yml
@@ -26,7 +47,6 @@
 - name: Install global dependencies
   ansible.builtin.import_tasks: install-plugin-global-dependencies.yml
   tags:
-    - package-cache
     - plugin-dependencies
 
 - name: Install plugin specific dependencies
