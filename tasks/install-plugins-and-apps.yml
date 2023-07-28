@@ -35,26 +35,26 @@
 #   become: true
 #   become_user: "{{ ansible_user }}"
 
-# 3 = 1 + 2
-- name: Install plugins
-  ansible.builtin.shell:
-    executable: "{{ bash_executable_path }}"
-    cmd: |
-      #! /usr/bin/env bash
-      set -o pipefail
-      export RTX_EXPERIMENTAL=1
-      export RTX_ALWAYS_KEEP_DOWNLOAD=1
-      RTX_DEBUG=1 {{ rtx_binary_installation_path }} plugins add {{ item.name }} {{ item.repository | default(lookup('ansible.builtin.vars', 'rtx_' + item.name + '_repository', default='')) }}
-  args:
-    creates: "{{ rtx_data_dir }}/plugins/{{ item.name }}"
-  environment:
-    RTX_DATA_DIR: "{{ rtx_data_dir | default(omit) }}"
-    http_proxy: "{{ http_proxy | default(omit) }}"
-    https_proxy: "{{ http_proxy | default(omit) }}"
-  with_items: "{{ rtx_plugins }}"
-  when: rtx_plugins | length > 0
-  become: true
-  become_user: "{{ ansible_user }}"
+# # 3 = 1 + 2
+# - name: Install plugins
+#   ansible.builtin.shell:
+#     executable: "{{ bash_executable_path }}"
+#     cmd: |
+#       #! /usr/bin/env bash
+#       set -o pipefail
+#       export RTX_EXPERIMENTAL=1
+#       export RTX_ALWAYS_KEEP_DOWNLOAD=1
+#       RTX_DEBUG=1 {{ rtx_binary_installation_path }} plugins add {{ item.name }} {{ item.repository | default(lookup('ansible.builtin.vars', 'rtx_' + item.name + '_repository', default='')) }}
+#   args:
+#     creates: "{{ rtx_data_dir }}/plugins/{{ item.name }}"
+#   environment:
+#     RTX_DATA_DIR: "{{ rtx_data_dir | default(omit) }}"
+#     http_proxy: "{{ http_proxy | default(omit) }}"
+#     https_proxy: "{{ http_proxy | default(omit) }}"
+#   with_items: "{{ rtx_plugins }}"
+#   when: rtx_plugins | length > 0
+#   become: true
+#   become_user: "{{ ansible_user }}"
 
 # - name: Specific tasks for {{ item }}
 #   ansible.builtin.include_tasks: plugins/{{ item }}.yml
@@ -101,20 +101,32 @@
 #   with_items: "{{ rtx_plugins }}"
 
 - name: Install apps
-  ansible.builtin.shell:
+  # ansible.builtin.shell:
+  #   executable: "{{ bash_executable_path }}"
+  #   cmd: |
+  #     #! /usr/bin/env bash
+  #     set -o pipefail
+  #     export RTX_EXPERIMENTAL=1
+  #     export RTX_ALWAYS_KEEP_DOWNLOAD=1
+  #     {{ rtx_binary_installation_path }} install {{ item.0.name }}@{{ item.1 }}
+  shell:
     executable: "{{ bash_executable_path }}"
     cmd: |
-      #! /usr/bin/env bash
-      set -o pipefail
-      export RTX_EXPERIMENTAL=1
-      export RTX_ALWAYS_KEEP_DOWNLOAD=1
-      {{ rtx_binary_installation_path }} install {{ item.0.name }}@{{ item.1 }}
+      bash -l <<EOF
+        #! /usr/bin/env bash
+        set -xeuo pipefail
+        source ~/.bashrc.local
+        {{ rtx_binary_installation_path }} install {{ item.0.name }}@{{ item.1 }}
+      EOF
   args:
     creates: "{{ rtx_data_dir }}/installs/{{ item.0.name }}/{{ item.1 }}"
   environment:
     RTX_DATA_DIR: "{{ rtx_data_dir | default(omit) }}"
     http_proxy: "{{ http_proxy | default(omit) }}"
-    https_proxy: "{{ http_proxy | default(omit) }}"
+    https_proxy: "{{ https_proxy | default(omit) }}"
+  register: cmd_result
+  retries: 5
+  until: cmd_result is succeeded
   with_subelements:
     - "{{ rtx_plugins }}"
     - versions
