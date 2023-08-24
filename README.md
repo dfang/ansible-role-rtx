@@ -37,24 +37,24 @@ roles:
 Compatibilities
 --------------
 
-support these linux operating systems except centos7(because of GLIBC_2.18 required by rtx):  
+support these linux operating systems except centos7(because of GLIBC_2.18 required by rtx):
 
-- centos7 (**not supported**)  
-- centos8  
-- amazonlinux2  
-- debian10  
-- debian11  
-- debian12  
-- fedora34  
-- fedora35  
-- fedora36  
-- fedora37  
-- fedora38  
-- rockylinux8  
-- rockylinux9  
-- ubuntu1804  
-- ubuntu2004  
-- ubuntu2204  
+- centos7 (**not supported**)
+- centos8
+- amazonlinux2
+- debian10
+- debian11
+- debian12
+- fedora34
+- fedora35
+- fedora36
+- fedora37
+- fedora38
+- rockylinux8
+- rockylinux9
+- ubuntu1804
+- ubuntu2004
+- ubuntu2204
 - opensuse (TODO)
 - OracleLinux (TODO)
 
@@ -66,13 +66,13 @@ system_wide: false
 rtx_plugins: see example playbook
 ```
 
-1. only support bash shell  
+1. only support bash shell
 
 2. if `system_wide: true`, `RTX_DATA_DIR` will be set to `/opt/rtx/`, rtx binary will install to `/usr/local/bin/rtx`
-   
-   if `system_wide: false`, `RTX_DATA_DIR` will be set to  `~/.local/share/rtx`, rtx binary will install to `~/bin/rtx` 
-   
-   the default is `false`. 
+
+   if `system_wide: false`, `RTX_DATA_DIR` will be set to  `~/.local/share/rtx`, rtx binary will install to `~/bin/rtx`
+
+   the default is `false`.
 
 3. if `system_wide: true`, `/etc/profile.d/rtx.sh` with below content will be created
     ```
@@ -85,7 +85,7 @@ rtx_plugins: see example playbook
     ```
 
     if `system_wide: false`, these content below will be appended to `~/.bashrc`
-    
+
     ```
     export RTX_DATA_DIR=$HOME/.local/share/rtx
     eval "$(~/bin/rtx activate bash)"
@@ -100,10 +100,10 @@ None
 Example Playbook
 ----------------
 
-for example: 
+for example:
 
-for erlang this will install 26.0.2 and set it to global version.   
-for nodejs, this will install versions `6.14.0`, `20.0.0` and set `20.0.0` to global version  
+for erlang this will install 26.0.2 and set it to global version.
+for nodejs, this will install versions `6.14.0`, `20.0.0` and set `20.0.0` to global version
 
 ```
     - hosts: servers
@@ -132,38 +132,15 @@ for nodejs, this will install versions `6.14.0`, `20.0.0` and set `20.0.0` to gl
           - name: "ruby"
             versions: ["3.1.4"]
             global: "3.1.4"
-          # - name: "zoxide"
-          #   repository: "https://ghproxy.com/https://github.com/nyrst/asdf-zoxide"           # a plugin repository, optional
-          #   versions: ["0.9.1"]
-          #   global: "0.9.1"
-          # - name: "fzf"
-          #   repository: "https://ghproxy.com/https://github.com/kompiro/asdf-fzf.git"        # a plugin repository, optional
-          #   versions: ["0.41.1"]
-          #   global: "0.41.1"
-          # - name: "fd"
-          #   repository: "https://gitlab.com/wt0f/asdf-fd.git"                                # a plugin repository, optional
-          #   versions: ["8.7.0"]
-          #   global: "8.7.0"
-          # - name: "ag"
-          #   repository: "https://ghproxy.com/https://github.com/koketani/asdf-ag.git"        # a plugin repository, optional
-          #   versions: ["2.2.0"]
-          #   global: "2.2.0"
-          # - name: "tmux"
-          #   repository: "https://ghproxy.com/https://github.com/aphecetche/asdf-tmux.git"    # a plugin repository, optional
-          #   versions: ["latest"]
-          #   global: "latest"
-          # - name: "java"
-          #   repository: "https://ghproxy.com/https://github.com/halcyon/asdf-java.git"
-          #   versions: ["openjdk-11"]
-          #   global: "openjdk-11"
-          # - name: "maven"
-          #   repository: "https://ghproxy.com/https://github.com/halcyon/asdf-maven.git"
-          #   versions: ["3.8.6"]
-          #   global: "3.8.6"
-
+          - name: "java"
+            versions: ["openjdk-11"]
+            global: "openjdk-11"
+          - name: "maven"
+            versions: ["3.8.6"]
+            global: "3.8.6"
 ```
 
-Check compatibility between elixir and erlang:  
+Check compatibility between elixir and erlang:
 
 https://hexdocs.pm/elixir/compatibility-and-deprecations.html#compatibility-between-elixir-and-erlang-otp
 
@@ -178,5 +155,3 @@ License
 -------
 
 MIT
-
-

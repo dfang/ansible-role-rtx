@@ -21,7 +21,7 @@
 - name: Print rtx_binary_installation_path
   ansible.builtin.debug:
     var: rtx_binary_installation_path
-    # verbosity: 3
+    verbosity: 3
 
 - name: Install rtx binary to {{ rtx_binary_installation_dir }}
   ansible.builtin.get_url:
