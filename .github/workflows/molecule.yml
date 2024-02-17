@@ -71,10 +71,19 @@
 # use https://ansible.readthedocs.io/projects/molecule/ci/#github-actions
 
 ---
-name: Molecule Test
-on: [push, pull_request]
+name: Molecule Test on default scenario
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    types: [ready_for_review, review_requested]
+  pull_request_review:
+    types:
+      - submitted
+      - edited
 jobs:
-  build:
+  default:
     runs-on: ubuntu-latest
     env:
       working-directory: ./
@@ -86,6 +95,20 @@ jobs:
       matrix:
         python-version: [3.10.12]
     steps:
+      # https://docs.github.com/en/actions/using-github-hosted-runners/about-github-hosted-runners#supported-runners-and-hardware-resources
+      # there are only 14GB for runner, and molecule test need many docker images
+      # No space left on device error
+      # https://github.com/marketplace/actions/free-disk-space-ubuntu
+      - name: Free Disk Space (Ubuntu)
+        uses: jlumbroso/free-disk-space@main
+        with:
+          tool-cache: false
+          android: true
+          dotnet: true
+          haskell: true
+          large-packages: false
+          docker-images: true
+          swap-storage: true
       - uses: actions/checkout@v2
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v2
@@ -103,4 +126,4 @@ jobs:
           eval $(pdm venv activate)
           ansible --version
           molecule --version
-          molecule test --parallel --all
+          molecule test -s default

@@ -1,0 +1,56 @@
+---
+name: Molecule Test on python scenario
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    types: [ready_for_review, review_requested]
+  pull_request_review:
+    types:
+      - submitted
+      - edited
+jobs:
+  python:
+    runs-on: ubuntu-latest
+    env:
+      working-directory: ./
+    defaults:
+      run:
+        working-directory: ${{ env.working-directory }}
+    strategy:
+      max-parallel: 4
+      matrix:
+        python-version: [3.10.12]
+    steps:
+      # https://docs.github.com/en/actions/using-github-hosted-runners/about-github-hosted-runners#supported-runners-and-hardware-resources
+      # there are only 14GB for runner, and molecule test need many docker images
+      # No space left on device error
+      # https://github.com/marketplace/actions/free-disk-space-ubuntu
+      - name: Free Disk Space (Ubuntu)
+        uses: jlumbroso/free-disk-space@main
+        with:
+          tool-cache: false
+          android: true
+          dotnet: true
+          haskell: true
+          large-packages: false
+          docker-images: true
+          swap-storage: true
+      - uses: actions/checkout@v2
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install dependencies
+        run: |
+          python3 -m pip install --upgrade pip
+          python3 -m pip install pdm==2.7.4
+          pdm -V
+          pdm sync
+      - name: Test with molecule
+        run: |
+          eval $(pdm venv activate)
+          ansible --version
+          molecule --version
+          molecule test -s python

@@ -1,0 +1,99 @@
+---
+dependency:
+  name: galaxy
+
+driver:
+  name: docker
+
+platforms:
+  # - name: centos8
+  #   image: quay.io/centos/centos:stream8
+  #   pre_build_image: true
+  # - name: centos7
+  #   image: centos:centos7
+  #   pre_build_image: true
+  # - name: ubuntu
+  #   image: pycontribs/ubuntu
+  #   pre_build_image: true
+  # - name: debian
+  #   image: pycontribs/debian
+  #   pre_build_image: true
+  # - name: bionic
+  #   image: ubuntu:18.04
+  #   pre_build_image: true
+  # - name: focal
+  #   image: ubuntu:20.04
+  #   pre_build_image: true
+  # - name: jammy
+  #   image: ubuntu:22.04
+  #   pre_build_image: true
+  # - name: kinetic
+  #   image: ubuntu:22.10
+  #   pre_build_image: true
+  # - name: ubuntu-pys
+  #   image: nmusatti/ubuntu-pys
+  #   pre_build_image: true
+
+  - name: ubuntu1804-pys
+    image: nmusatti/ubuntu1804-pys
+    pre_build_image: true
+  - name: ubuntu2004-pys
+    image: nmusatti/ubuntu2004-pys
+    pre_build_image: true
+  - name: ubuntu2204-pys
+    image: nmusatti/ubuntu2204-pys
+    pre_build_image: true
+
+  - name: amazonlinux2
+    image: geerlingguy/docker-amazonlinux2-ansible
+    pre_build_image: true
+  # - name: centos7 (GLIBC_2.18 not found which required by rtx)
+  #   image: geerlingguy/docker-centos7-ansible
+  #   pre_build_image: true
+  - name: centos8
+    image: geerlingguy/docker-centos8-ansible
+    pre_build_image: true
+
+  - name: debian10
+    image: geerlingguy/docker-debian10-ansible
+    pre_build_image: true
+  - name: debian11
+    image: geerlingguy/docker-debian11-ansible
+    pre_build_image: true
+  - name: debian12
+    image: geerlingguy/docker-debian12-ansible
+    pre_build_image: true
+
+  - name: rockylinux8
+    image: geerlingguy/docker-rockylinux8-ansible
+    pre_build_image: true
+  - name: rockylinux9
+    image: geerlingguy/docker-rockylinux9-ansible
+    pre_build_image: true
+
+  - name: fedora34
+    image: geerlingguy/docker-fedora34-ansible
+    pre_build_image: true
+  - name: fedora35
+    image: geerlingguy/docker-fedora35-ansible
+    pre_build_image: true
+  - name: fedora36
+    image: geerlingguy/docker-fedora36-ansible
+    pre_build_image: true
+  - name: fedora37
+    image: geerlingguy/docker-fedora37-ansible
+    pre_build_image: true
+  - name: fedora38
+    image: geerlingguy/docker-fedora37-ansible
+    pre_build_image: true
+
+provisioner:
+  name: ansible
+
+verifier:
+  name: ansible
+
+lint: |
+  set -e
+  yamllint .
+  ansible-lint --write=all --show-relpath
